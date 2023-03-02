@@ -1,47 +1,17 @@
-import 'reflect-metadata';
+import express, { Express, Request, Response } from "express";
 
-import { bootstrapMicroframework } from 'microframework-w3tec';
+const port = 8000;
 
-import { banner } from './lib/banner';
-import { Logger } from './lib/logger';
-import { eventDispatchLoader } from './loaders/eventDispatchLoader';
-import { expressLoader } from './loaders/expressLoader';
-import { graphqlLoader } from './loaders/graphqlLoader';
-import { homeLoader } from './loaders/homeLoader';
-import { iocLoader } from './loaders/iocLoader';
-import { monitorLoader } from './loaders/monitorLoader';
-import { publicLoader } from './loaders/publicLoader';
-import { swaggerLoader } from './loaders/swaggerLoader';
-import { typeormLoader } from './loaders/typeormLoader';
-import { winstonLoader } from './loaders/winstonLoader';
+const app: Express = express();
 
-/**
- * EXPRESS TYPESCRIPT BOILERPLATE
- * ----------------------------------------
- *
- * This is a boilerplate for Node.js Application written in TypeScript.
- * The basic layer of this app is express. For further information visit
- * the 'README.md' file.
- */
-const log = new Logger(__filename);
+app.get("/", async (req: Request, res: Response) => {
+  res.send("Hello from express and TypeScript!");
+});
 
-bootstrapMicroframework({
-    /**
-     * Loader is a place where you can configure all your modules during microframework
-     * bootstrap process. All loaders are executed one by one in a sequential order.
-     */
-    loaders: [
-        winstonLoader,
-        iocLoader,
-        eventDispatchLoader,
-        typeormLoader,
-        expressLoader,
-        swaggerLoader,
-        monitorLoader,
-        homeLoader,
-        publicLoader,
-        graphqlLoader,
-    ],
-})
-    .then(() => banner(log))
-    .catch(error => log.error('Application is crashed: ' + error));
+app.get("/hello", async (req: Request, res: Response) => {
+  res.send("Bye from new route!");
+});
+
+app.listen(port, () => {
+  console.log(`App is listening on port ${port}`);
+});
