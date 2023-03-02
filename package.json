@@ -55,6 +55,8 @@
     "safe-buffer": "^5.2.1",
     "safer-buffer": "^2.1.2",
     "send": "^0.18.0",
+    "sequelize": "^6.29.0",
+    "sequelize-cli-typescript": "^3.2.0-c",
     "serve-static": "^1.15.0",
     "setprototypeof": "^1.2.0",
     "side-channel": "^1.0.4",
