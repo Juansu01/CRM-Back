@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
+import db from "./models";
 
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 const app: Express = express();
 
@@ -12,6 +13,8 @@ app.get("/hello", async (req: Request, res: Response) => {
   res.send("Bye from new route!");
 });
 
-app.listen(port, () => {
-  console.log(`App is listening on port ${port}`);
+db.sequelize.sync().then(() => {
+  app.listen(port, () => {
+    console.log(`Connected to database and app is listening on port ${port}`);
+  });
 });

@@ -38,3 +38,5 @@ test/**/*.js.map
 coverage/
 !test/preprocessor.js
 mydb.sql
+
+src/config
