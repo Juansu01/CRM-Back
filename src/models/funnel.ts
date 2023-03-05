@@ -17,7 +17,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
     name: string;
     static associate(models: any) {
       // define association here
-      Funnel.belongsTo(models.Deal);
+      Funnel.belongsTo(models.Deal, { foreignKey: "deal_id" });
+      Funnel.belongsToMany(models.User, { through: "Funnel_User" });
+      Funnel.belongsToMany(models.Stage, { through: "Funnel_Stage" });
     }
   }
   Funnel.init(

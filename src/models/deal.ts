@@ -38,6 +38,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       // define association here
       Deal.belongsToMany(models.User, { through: "User_Deal" });
       Deal.hasMany(models.Funnel, { foreignKey: "deal_id" });
+      Deal.belongsTo(models.Lead, { foreignKey: "lead_id" });
+      Deal.hasOne(models.Note, { foreignKey: "deal_id" });
+      Deal.belongsToMany(models.Stage, { through: "Deal_Stage" });
+      Deal.hasMany(models.Status);
     }
   }
   Deal.init(

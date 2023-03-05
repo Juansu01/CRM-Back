@@ -1,32 +1,30 @@
 "use strict";
 import { Model } from "sequelize";
 
-interface UserAttributes {
+interface ModelAttributes {
   id: number;
-  full_name: string;
-  is_admin: boolean;
+  company: string;
   email: string;
+  full_name: string;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
-  class User extends Model<UserAttributes> implements UserAttributes {
+  class Lead extends Model<ModelAttributes> {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     id!: number;
+    company: string;
+    email: string;
     full_name: string;
-    is_admin: boolean;
-    email!: string;
-
     static associate(models: any) {
       // define association here
-      User.belongsToMany(models.Deal, { through: "User_Deal" });
-      User.belongsToMany(models.Funnel, { through: "Funnel_User" });
+      Lead.hasMany(models.Deal, { foreignKey: "lead_id" });
     }
   }
-  User.init(
+  Lead.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -34,18 +32,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
         autoIncrement: true,
         primaryKey: true,
       },
+      company: DataTypes.STRING,
+      email: DataTypes.STRING,
       full_name: DataTypes.STRING,
-      is_admin: DataTypes.BOOLEAN,
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "Lead",
     }
   );
-  return User;
+  return Lead;
 };
