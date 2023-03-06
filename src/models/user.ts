@@ -6,6 +6,7 @@ interface UserAttributes {
   full_name: string;
   is_admin: boolean;
   email: string;
+  password: string;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -19,6 +20,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     full_name: string;
     is_admin: boolean;
     email!: string;
+    password!: string;
 
     static associate(models: any) {
       // define association here
@@ -40,6 +42,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {
