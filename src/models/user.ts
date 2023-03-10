@@ -1,7 +1,7 @@
 "use strict";
 import { Model } from "sequelize";
 
-interface UserAttributes {
+export default interface UserAttributes {
   id: number;
   full_name: string;
   is_admin: boolean;
