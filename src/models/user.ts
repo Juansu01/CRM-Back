@@ -1,7 +1,7 @@
 "use strict";
 import { Model } from "sequelize";
 
-interface UserAttributes {
+export default interface UserAttributes {
   id: number;
   full_name: string;
   is_admin: boolean;
@@ -51,6 +51,16 @@ module.exports = (sequelize: any, DataTypes: any) => {
     {
       sequelize,
       modelName: "User",
+      defaultScope: {
+        attributes: {
+          exclude: ["password"],
+        },
+      },
+      scopes: {
+        withPassword: {
+          attributes: { include: ["password"] },
+        },
+      },
     }
   );
   return User;

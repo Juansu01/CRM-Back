@@ -1,19 +1,24 @@
 import express, { Express, Request, Response } from "express";
 import db from "./models";
+import cors from "cors";
+import routes from "./routes/index";
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 4000;
 
 const app: Express = express();
+app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+app.use(express.json());
 
-app.get("/", async (req: Request, res: Response) => {
-  res.send("Hello from express and TypeScript!");
+routes.forEach((route) => {
+  app.use("/api", route);
 });
 
-app.get("/hello", async (req: Request, res: Response) => {
-  res.send("Bye from new route!");
+app.get("/api", async (req: Request, res: Response) => {
+  res.send("Welcome to the Slsppln API");
 });
 
-db.sequelize.sync().then(() => {
+db.sequelize.authenticate().then(() => {
   app.listen(port, () => {
     console.log(`Connected to database and app is listening on port ${port}`);
   });

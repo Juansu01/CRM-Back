@@ -23,7 +23,7 @@ if (config.use_env_variable) {
 fs.readdirSync(__dirname)
   .filter((file: string) => {
     return (
-      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".ts"
+      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
     );
   })
   .forEach((file: any) => {
