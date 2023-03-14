@@ -4,6 +4,7 @@ import { Model } from "sequelize";
 interface FunnelAttributes {
   id: number;
   name: string;
+  deal_id: number;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -15,6 +16,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
      */
     id!: number;
     name: string;
+    deal_id: number;
     static associate(models: any) {
       // define association here
       Funnel.belongsTo(models.Deal, { foreignKey: "deal_id" });
@@ -31,6 +33,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
         primaryKey: true,
       },
       name: DataTypes.STRING,
+      deal_id: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,
