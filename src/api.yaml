@@ -1,0 +1,124 @@
+openapi: "3.0.0"
+info:
+  title: CRM-SlsppIn API
+  version: "1.0.0"
+  description: |
+    API description.
+paths:
+  /api:
+    get:
+      description: |
+        API's first route
+      operationId: firstRoute
+      responses:
+        "200":
+          description: Returns a message for testing purposes.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Welcome to the Slsppln API
+  /api/spec:
+    get:
+      description: |
+        Returns the specification for the API
+      operationId: apiSpec
+      responses:
+        "200":
+          description: Returns the specification
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Welcome to the Slsppln API
+  /api/users/login:
+    post:
+      description: LogIn Route
+      requestBody:
+        description: Log user in.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLogIn"
+      responses:
+        "200":
+          description: Returns a response with access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserLogInRes"
+        "401":
+          description: Provided credentials are not valid.
+        "500":
+          description: Internal Server Error
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/users/register:
+    post:
+      description: Register a new user
+      responses:
+        "200":
+          description: Returns a response with access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRegister"
+        "401":
+          description: User already exists.
+        "500":
+          description: Internal Server Error
+components:
+  schemas:
+    UserRegister:
+      required:
+        - email
+        - password
+        - full_name
+        - is_admin
+      properties:
+        email:
+          type: string
+          example: myemail@test.com
+        password:
+          type: string
+          example: password
+        full_name:
+          type: string
+          example: John Doe
+        is_admin:
+          type: boolean
+          example: true
+    UserLogIn:
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: test@test.com
+        password:
+          type: string
+          example: Mypassword123
+    UserLogInRes:
+      properties:
+        message:
+          type: string
+          example: Login was successful!
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoidGVzdDJAdGVzdC5jb20iLCJpYXQiOjE2Nzg3NDA3ODJ9.a4BYPi5gTyhoy4u76NQSaMBfQO4RA2IpeDQ6ebn7Bmg
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

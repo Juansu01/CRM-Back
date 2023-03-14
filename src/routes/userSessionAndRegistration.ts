@@ -30,7 +30,7 @@ function authenticateToken(req: Request, res: Response, next: NextFunction) {
   });
 }
 
-sessionAndRegistration.post("/register", async (req, res) => {
+sessionAndRegistration.post("/users/register", async (req, res) => {
   const { email, password, full_name, is_admin } = req.body;
   const user = await db.User.findOne({ where: { email: email } });
 
@@ -52,7 +52,7 @@ sessionAndRegistration.post("/register", async (req, res) => {
         const newUser = await db.User.create({
           email,
           password: hash,
-          is_admin: is_admin === "true",
+          is_admin: is_admin.toLowerCase() === "true",
           full_name,
         });
 
@@ -75,7 +75,7 @@ sessionAndRegistration.post("/register", async (req, res) => {
   }
 });
 
-sessionAndRegistration.post("/login", async (req, res) => {
+sessionAndRegistration.post("/users/login", async (req, res) => {
   const { email, password } = req.body;
   const user = await db.User.scope("withPassword").findOne({
     where: { email },
@@ -109,7 +109,7 @@ sessionAndRegistration.post("/login", async (req, res) => {
   }
 });
 
-sessionAndRegistration.post("/recover-password", async (req, res) => {
+sessionAndRegistration.post("/users/recover-password", async (req, res) => {
   const { email, password } = req.body;
 
   return res.status(200).json({
@@ -119,7 +119,7 @@ sessionAndRegistration.post("/recover-password", async (req, res) => {
   });
 });
 
-sessionAndRegistration.post("/logout", async (req, res) => {
+sessionAndRegistration.post("/users/logout", async (req, res) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 });
