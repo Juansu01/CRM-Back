@@ -10,7 +10,7 @@ export const refreshTokenController = (req: Request, res: Response) => {
     jwt.verify(oldRefreshToken, secretWord);
 
     // new pair tokens
-    const newRefreshToken = jwt.sign({}, secretWord, { expiresIn: "48h" });
+    const newRefreshToken = jwt.sign({}, secretWord, { expiresIn: "7 days" });
     const newAccessToken = jwt.sign({}, secretWord, { expiresIn: "24h" });
 
     // send tokens
