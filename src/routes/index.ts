@@ -1,3 +1,4 @@
 import sessionAndRegistration from "./userSessionAndRegistration";
+import refreshToken from "./refreshToken";
 
-export default [sessionAndRegistration];
+export default [sessionAndRegistration, refreshToken];
