@@ -8,17 +8,17 @@ const newTokens = (expiresIn: string, data) =>
 
 export const refreshTokenController = async (req: Request, res: Response) => {
   const oldRefreshToken = req.headers["refresh-token"] as string;
-  const noValidToken = () =>
-    res.status(498).json({ message: "no valid token" });
 
   try {
     // token validation with db
     const data: any = jwt.verify(oldRefreshToken, secretWord);
-    const user = await db.User.findOne({ where: { email: data.email } });
-    if (user.refresh_token !== oldRefreshToken) return noValidToken();
+    const user = await db.User.findOneOrFail({ where: { email: data.email } });
+
+    if (user.refresh_token !== oldRefreshToken)
+      throw new Error("no valid token");
 
     // new pair tokens
-    const tokenBody = { ...user.dataValues };
+    const tokenBody = Object.assign({}, user.dataValues);
     delete tokenBody.refresh_token;
 
     const newRefreshToken = newTokens("24h", tokenBody);
@@ -36,7 +36,6 @@ export const refreshTokenController = async (req: Request, res: Response) => {
 
     res.json({ message: "tokens refreshed" });
   } catch (e) {
-    console.log(e);
-    return noValidToken();
+    res.status(498).json({ message: "no valid token" });
   }
 };
