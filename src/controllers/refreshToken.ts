@@ -12,9 +12,9 @@ export const refreshTokenController = async (req: Request, res: Response) => {
   try {
     // token validation with db
     const data: any = jwt.verify(oldRefreshToken, secretWord);
-    const user = await db.User.findOneOrFail({ where: { email: data.email } });
+    const user = await db.User.findOne({ where: { email: data.email } });
 
-    if (user.refresh_token !== oldRefreshToken)
+    if (user && user.refresh_token !== oldRefreshToken)
       throw new Error("no valid token");
 
     // new pair tokens
