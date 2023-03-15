@@ -1,24 +1,42 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import db from "../models";
 
-export const refreshTokenController = (req: Request, res: Response) => {
-  const secretWord = process.env.ACCESS_TOKEN_SECRET || "secret";
+const secretWord = process.env.ACCESS_TOKEN_SECRET;
+const newTokens = (expiresIn: string, data) =>
+  jwt.sign(data, secretWord, { expiresIn });
+
+export const refreshTokenController = async (req: Request, res: Response) => {
   const oldRefreshToken = req.headers["refresh-token"] as string;
+  const noValidToken = () =>
+    res.status(498).json({ message: "no valid token" });
 
   try {
     // token validation with db
-    jwt.verify(oldRefreshToken, secretWord);
+    const data: any = jwt.verify(oldRefreshToken, secretWord);
+    const user = await db.User.findOne({ where: { email: data.email } });
+    if (user.refresh_token !== oldRefreshToken) return noValidToken();
 
     // new pair tokens
-    const newRefreshToken = jwt.sign({}, secretWord, { expiresIn: "7 days" });
-    const newAccessToken = jwt.sign({}, secretWord, { expiresIn: "24h" });
+    const tokenBody = { ...user.dataValues };
+    delete tokenBody.refresh_token;
 
-    // send tokens
-    res.set({ authorization: `Bearer ${newAccessToken}` });
+    const newRefreshToken = newTokens("24h", tokenBody);
+    const newAccessToken = newTokens("48h", tokenBody);
+
+    // update the new refresh token to db
+    await db.User.update(
+      { refresh_token: newRefreshToken },
+      { where: { email: user.email } }
+    );
+
+    // send tokens on headers
+    res.set({ Authorization: `Bearer ${newAccessToken}` });
     res.set({ "refresh-token": `${newRefreshToken}` });
 
-    res.json({ message: "token refreshed" });
+    res.json({ message: "tokens refreshed" });
   } catch (e) {
-    return res.status(498).json({ message: "no valid token" });
+    console.log(e);
+    return noValidToken();
   }
 };

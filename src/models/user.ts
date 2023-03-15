@@ -7,6 +7,7 @@ export default interface UserAttributes {
   is_admin: boolean;
   email: string;
   password: string;
+  refresh_token: string;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -21,6 +22,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     is_admin: boolean;
     email!: string;
     password!: string;
+    refresh_token: string;
 
     static associate(models: any) {
       // define association here
@@ -46,6 +48,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      refresh_token: {
+        type: DataTypes.STRING(1200),
+        allowNull: true,
       },
     },
     {
