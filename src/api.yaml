@@ -31,6 +31,67 @@ paths:
               schema:
                 type: string
                 example: Welcome to the Slsppln API
+  /api/filter/{model}/{attribute}:
+    get:
+      summary: Get filtered data from specific model.
+      parameters:
+        - in: path
+          name: model
+          schema:
+            type: string
+            example: funnel
+          required: true
+          description: Name of the model to get filtered data from
+        - in: path
+          name: attribute
+          schema:
+            type: string
+            example: name
+          required: true
+          description: Name of the attribute in model to get filtered data from
+        - in: query
+          name: value
+          schema:
+            type: string
+            example: Test
+          required: true
+          description: Value to look for inside attribute
+        - in: query
+          name: order
+          schema:
+            type: string
+            example: asc
+          required: true
+          description: Data order, asc or desc
+        - in: query
+          name: col
+          schema:
+            type: string
+            example: id
+          required: true
+          description: Column to order the data by
+      responses:
+        "200":
+          description: Returns the filtered data from the database
+          content:
+            application/json:
+              schema:
+                example: [
+                  {
+                      "id": 2,
+                      "name": "Test",
+                      "deal_id": 1,
+                      "createdAt": "2023-03-14T20:06:56.000Z",
+                      "updatedAt": "2023-03-14T20:06:56.000Z"
+                  },
+                  {
+                      "id": 1,
+                      "name": "Test",
+                      "deal_id": 1,
+                      "createdAt": "2023-03-14T20:06:04.000Z",
+                      "updatedAt": "2023-03-14T20:06:04.000Z"
+                  }
+              ]
   /api/users/login:
     post:
       description: LogIn Route
@@ -72,8 +133,98 @@ paths:
           description: User already exists.
         "500":
           description: Internal Server Error
+  /api/funnels:
+    get:
+      description: Get all funnels
+      responses:
+        "200":
+          description: All funnels were returned succesfully
+          content:
+            application/json:
+              example: [
+                {
+                    "id": 1,
+                    "name": "Test",
+                    "deal_id": 1,
+                    "createdAt": "2023-03-14T20:06:04.000Z",
+                    "updatedAt": "2023-03-14T20:06:04.000Z",
+                    "Users": []
+                },
+                {
+                    "id": 2,
+                    "name": "Test",
+                    "deal_id": 1,
+                    "createdAt": "2023-03-14T20:06:56.000Z",
+                    "updatedAt": "2023-03-14T20:06:56.000Z",
+                    "Users": []
+                },
+                {
+                    "id": 3,
+                    "name": "Test",
+                    "deal_id": 1,
+                    "createdAt": "2023-03-16T20:19:36.000Z",
+                    "updatedAt": "2023-03-16T20:19:36.000Z",
+                    "Users": [
+                        {
+                            "id": 1,
+                            "full_name": "Juan Cadavid",
+                            "is_admin": false,
+                            "email": "test@test.com",
+                            "refresh_token": null,
+                            "createdAt": "2023-03-16T20:19:21.000Z",
+                            "updatedAt": "2023-03-16T20:19:21.000Z",
+                            "Funnel_User": {
+                                "createdAt": "2023-03-16T20:19:36.000Z",
+                                "updatedAt": "2023-03-16T20:19:36.000Z",
+                                "FunnelId": 3,
+                                "UserId": 1
+                            }
+                        }
+                    ]
+                }
+            ]
+    post:
+      description: Create a new funnel
+      requestBody:
+        description: Add new funnel
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Funnel"
+      responses:
+        "200":
+          description: Funnel was created succesfully
+          content:
+            application/json:
+              example: {
+                "id": 3,
+                "name": "Test",
+                "deal_id": 1,
+                "updatedAt": "2023-03-16T20:19:36.140Z",
+                "createdAt": "2023-03-16T20:19:36.140Z"
+            }
+        "404":
+          description: Provided email doesn't have a user.
+          content:
+            application/json:
+              example: {
+                  "message": "User was not found, cannot add Funnel"
+              }
 components:
   schemas:
+    Funnel:
+      required:
+        - name
+        - deal_id
+        - email
+      properties:
+        name:
+          type: string
+        deal_id:
+          type: integer
+        email:
+          type: string
     UserRegister:
       required:
         - email

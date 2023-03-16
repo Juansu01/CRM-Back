@@ -6,8 +6,10 @@ const filterRouter = Router();
 filterRouter.get("/filter/:model/:attribute", async (req, res) => {
   const model = req.params.model;
   const attribute = req.params.attribute;
-  const { value } = req.body;
-  const [col, order] = req.body.order.split(" ");
+  const value = req.query.value;
+  const col = req.query.col;
+  const order = req.query.order;
+  console.log(order);
   const queryConfig = {
     where: {},
     order: [[col, order.toUpperCase()]],
