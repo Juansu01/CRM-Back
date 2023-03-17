@@ -6,10 +6,10 @@ export const updateFunnelName = async (
   res: Response,
   next: NextFunction
 ) => {
-  const idUser = req.params.idUser;
+  const userEmail = req.body.email;
 
   try {
-    const user = db.User.findById(idUser);
+    const user = db.User.findOne({ email: userEmail });
     if (!user) return res.status(404).json({ mesage: "user not found" });
     if (!user.is_admin)
       return res.status(404).json({ mesage: "user is not admin" });
