@@ -1,4 +1,9 @@
-import express, { Express, Request, Response } from "express";
+import express, {
+  Express,
+  Request,
+  Response,
+  ErrorRequestHandler,
+} from "express";
 import db from "./models";
 import cors from "cors";
 import routes from "./routes/index";
@@ -6,6 +11,13 @@ import * as OpenApiValidator from "express-openapi-validator";
 
 const port = process.env.PORT || 4000;
 const app: Express = express();
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  console.error(err);
+  res.status(err.status || 500).json({
+    message: err.message,
+    errors: err.errors,
+  });
+};
 
 app.use(cors());
 app.use(express.json());
@@ -26,13 +38,7 @@ routes.forEach((route) => {
   app.use("/api", route);
 });
 
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(err.status || 500).json({
-    message: err.message,
-    errors: err.errors,
-  });
-});
+app.use(errorHandler);
 
 db.sequelize.authenticate().then(() => {
   app.listen(port, () => {
