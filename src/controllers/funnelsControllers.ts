@@ -32,3 +32,15 @@ export const createNewFunnel = async (req: Request, res: Response) => {
       .json({ message: "User was not found, cannot add Funnel" });
   }
 };
+
+export const updateNameFunnel = async (req: Request, res: Response) => {
+  const idFunnel = req.params.idFunnel;
+  const { name } = req.body;
+
+  try {
+    await db.Funnel.update({ name: name }, { where: { id: idFunnel } });
+    res.json({ mesage: "funnel name updated" });
+  } catch (e) {
+    res.status(500).json({ mesage: "Internal server error" });
+  }
+};
