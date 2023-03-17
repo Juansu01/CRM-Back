@@ -33,7 +33,7 @@ export const createNewFunnel = async (req: Request, res: Response) => {
   }
 };
 
-export const updateNameFunnel = async (req: Request, res: Response) => {
+export const updateFunnelName = async (req: Request, res: Response) => {
   const idFunnel = req.params.idFunnel;
   const { name } = req.body;
 
@@ -43,4 +43,9 @@ export const updateNameFunnel = async (req: Request, res: Response) => {
   } catch (e) {
     res.status(500).json({ mesage: "Internal server error" });
   }
+};
+
+export const updateFunnelStage = async (req: Request, res: Response) => {
+  const idFunnel = req.params.idFunnel;
+  const { idStage } = req.body;
 };

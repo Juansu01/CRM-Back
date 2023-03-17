@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import db from "../models";
 
-export const updateFunnelName = async (
+export const isAdmin = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -18,3 +18,5 @@ export const updateFunnelName = async (
     res.status(500).json({ mesage: "Internal server error" });
   }
 };
+
+export default isAdmin;
