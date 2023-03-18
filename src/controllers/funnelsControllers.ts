@@ -74,3 +74,33 @@ export const removeFunnelStage = async (req: Request, res: Response) => {
     res.status(500).json({ mesage: "Internal server error" });
   }
 };
+
+export const addFunnelUser = async (req: Request, res: Response) => {
+  const idFunnel = req.params.idFunnel;
+  const { emailUser } = req.body;
+
+  try {
+    const funnelToUpdate = await db.Funnel.findByPk(idFunnel);
+    const userToAdd = await db.User.findOne({ email: emailUser });
+
+    funnelToUpdate.addUser(userToAdd);
+    res.json({ mesage: "user added from funnel" });
+  } catch (e) {
+    res.status(500).json({ mesage: "Internal server error" });
+  }
+};
+
+export const removeFunnelUser = async (req: Request, res: Response) => {
+  const idFunnel = req.params.idFunnel;
+  const { emailUser } = req.body;
+
+  try {
+    const funnelToUpdate = await db.Funnel.findByPk(idFunnel);
+    const userToRemove = await db.User.findOne({ email: emailUser });
+
+    funnelToUpdate.removeUser(userToRemove);
+    res.json({ mesage: "user removed from funnel" });
+  } catch (e) {
+    res.status(500).json({ mesage: "Internal server error" });
+  }
+};
