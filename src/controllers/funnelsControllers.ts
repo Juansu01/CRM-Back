@@ -3,9 +3,7 @@ import db from "../models";
 
 export const getAllFunnelsController = async (req: Request, res: Response) => {
   const funnels = await db.Funnel.findAll({
-    include: {
-      model: db.User,
-    },
+    include: [{ model: db.User }, { model: db.Stage }],
   });
 
   return res.status(200).json(funnels);
@@ -35,7 +33,9 @@ export const createNewFunnel = async (req: Request, res: Response) => {
 
 export const updateFunnelName = async (req: Request, res: Response) => {
   const idFunnel = req.params.idFunnel;
-  const { name } = req.body;
+  const name = req.body.name;
+
+  if (!name || name === "") return res.json({ message: "no name provided" });
 
   try {
     await db.Funnel.update({ name: name }, { where: { id: idFunnel } });
@@ -45,7 +45,32 @@ export const updateFunnelName = async (req: Request, res: Response) => {
   }
 };
 
-export const updateFunnelStage = async (req: Request, res: Response) => {
+export const addFunnelStage = async (req: Request, res: Response) => {
   const idFunnel = req.params.idFunnel;
   const { idStage } = req.body;
+
+  try {
+    const funnelToUpdate = await db.Funnel.findByPk(idFunnel);
+    const stageToAdd = await db.Stage.findByPk(idStage);
+
+    funnelToUpdate.addStage(stageToAdd);
+    res.json({ mesage: "stage added to funnel" });
+  } catch (e) {
+    res.status(500).json({ mesage: "Internal server error" });
+  }
+};
+
+export const removeFunnelStage = async (req: Request, res: Response) => {
+  const idFunnel = req.params.idFunnel;
+  const { idStage } = req.body;
+
+  try {
+    const funnelToUpdate = await db.Funnel.findByPk(idFunnel);
+    const stageToRemove = await db.Stage.findByPk(idStage);
+
+    funnelToUpdate.removeStage(stageToRemove);
+    res.json({ mesage: "stage removed from funnel" });
+  } catch (e) {
+    res.status(500).json({ mesage: "Internal server error" });
+  }
 };
