@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import db from "../models";
+import messageGenerator from "../services/messageGenerator";
 
 export const getAllFunnelsController = async (req: Request, res: Response) => {
   const funnels = await db.Funnel.findAll({
@@ -35,13 +36,14 @@ export const updateFunnelName = async (req: Request, res: Response) => {
   const idFunnel = req.params.idFunnel;
   const name = req.body.name;
 
-  if (!name || name === "") return res.json({ message: "no name provided" });
+  if (!name || name === "")
+    return res.json(messageGenerator([], "no funnel name provided"));
 
   try {
     await db.Funnel.update({ name: name }, { where: { id: idFunnel } });
-    res.json({ mesage: "funnel name updated" });
+    res.json(messageGenerator([], "funnel name updated"));
   } catch (e) {
-    res.status(500).json({ mesage: "Internal server error" });
+    res.status(500).json(messageGenerator(["errors", "server"]));
   }
 };
 
@@ -56,7 +58,7 @@ export const addFunnelStage = async (req: Request, res: Response) => {
     funnelToUpdate.addStage(stageToAdd);
     res.json({ mesage: "stage added to funnel" });
   } catch (e) {
-    res.status(500).json({ mesage: "Internal server error" });
+    res.status(500).json(messageGenerator(["errors", "server"]));
   }
 };
 
@@ -71,7 +73,7 @@ export const removeFunnelStage = async (req: Request, res: Response) => {
     funnelToUpdate.removeStage(stageToRemove);
     res.json({ mesage: "stage removed from funnel" });
   } catch (e) {
-    res.status(500).json({ mesage: "Internal server error" });
+    res.status(500).json(messageGenerator(["errors", "server"]));
   }
 };
 
@@ -86,7 +88,7 @@ export const addFunnelUser = async (req: Request, res: Response) => {
     funnelToUpdate.addUser(userToAdd);
     res.json({ mesage: "user added from funnel" });
   } catch (e) {
-    res.status(500).json({ mesage: "Internal server error" });
+    res.status(500).json(messageGenerator(["errors", "server"]));
   }
 };
 
@@ -101,6 +103,6 @@ export const removeFunnelUser = async (req: Request, res: Response) => {
     funnelToUpdate.removeUser(userToRemove);
     res.json({ mesage: "user removed from funnel" });
   } catch (e) {
-    res.status(500).json({ mesage: "Internal server error" });
+    res.status(500).json(messageGenerator(["errors", "server"]));
   }
 };

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import db from "../models";
+import messageGenerator from "../services/messageGenerator";
 
 const secretWord = process.env.ACCESS_TOKEN_SECRET;
 const newTokens = (expiresIn: string, data) =>
@@ -34,8 +35,8 @@ export const refreshTokenController = async (req: Request, res: Response) => {
     res.set({ Authorization: `Bearer ${newAccessToken}` });
     res.set({ "refresh-token": `${newRefreshToken}` });
 
-    res.json({ message: "tokens refreshed" });
+    res.json(messageGenerator(["token", "refreshed"]));
   } catch (e) {
-    res.status(498).json({ message: "no valid token" });
+    res.status(498).json(messageGenerator(["token", "noValid"]));
   }
 };
