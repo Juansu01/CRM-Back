@@ -10,6 +10,7 @@ const filterModelController = async (req: Request, res: Response) => {
   const queryConfig = {
     where: {},
     order: [[col, order.toUpperCase()]],
+    include: [{ model: db.User }, { model: db.Stage }],
   };
   let result;
 
