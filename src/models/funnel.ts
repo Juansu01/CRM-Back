@@ -1,7 +1,7 @@
 "use strict";
 import { Model } from "sequelize";
 
-interface FunnelAttributes {
+export interface FunnelAttributes {
   id: number;
   name: string;
   deal_id: number;

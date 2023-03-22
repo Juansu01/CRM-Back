@@ -50,10 +50,14 @@ export const userRegistrationController = async (
           console.error(err);
           res.status(500).json({ message: "Internal server error" });
         }
+        const isAdmin =
+          typeof is_admin == "boolean"
+            ? is_admin
+            : is_admin.toLowerCase() === "true";
         const newUser = await db.User.create({
           email,
           password: hash,
-          is_admin: is_admin.toLowerCase() === "true",
+          is_admin: isAdmin,
           full_name,
         });
 

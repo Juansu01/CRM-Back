@@ -211,6 +211,109 @@ paths:
               example: {
                   "message": "User was not found, cannot add Funnel"
               }
+  /api/funnel/{idFunnel}:
+    patch:
+      description: Update Funnel name
+      requestBody:
+        description: Body containing new name
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FunnelNameUpdate"
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be updated
+      responses:
+        "200":
+          description: Funnel was succesfully updated
+  /api/funnel/stage/{idFunnel}:
+    post:
+      description: Creates a new Stage and links it to funnel using id
+      requestBody:
+        description: Contains Stage id
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FunnelStageUpdate"
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be updated
+      responses:
+        "200":
+          description: Funnel was succesfully updated
+    delete:
+      description: Deletes
+      requestBody:
+        description: Contains Stage id
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FunnelStageUpdate"
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be updated
+      responses:
+        "200":
+          description: Stage was successfully removed from Funnel
+  /api//funnel/user/{idFunnel}:
+    post:
+      description: Adds user to existing Funnel
+      requestBody:
+        description: Contains user email
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FunnelUserCreate"
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be updated
+      responses:
+        "200":
+          description: User was succesfully added to Funnel
+    delete:
+      description: Removes User from Funnel
+      requestBody:
+        description: Contains user email
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FunnelUserCreate"
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be updated
+      responses:
+        "200":
+          description: User was succesfully removed from Funnel
 components:
   schemas:
     Funnel:
@@ -263,6 +366,28 @@ components:
         access_token:
           type: string
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoidGVzdDJAdGVzdC5jb20iLCJpYXQiOjE2Nzg3NDA3ODJ9.a4BYPi5gTyhoy4u76NQSaMBfQO4RA2IpeDQ6ebn7Bmg
+    FunnelNameUpdate:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Funnel Name
+    FunnelStageUpdate:
+      required:
+        - idStage
+      properties:
+        idStage:
+          type: integer
+          example: 1
+    FunnelUserCreate:
+      required:
+        - emailUser
+      properties:
+        emailUser:
+          type: string
+          example: jhondoe@email.com
+          format: email
     Error:
       required:
         - code
