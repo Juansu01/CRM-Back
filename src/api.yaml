@@ -1,0 +1,505 @@
+openapi: "3.0.0"
+info:
+  title: CRM-SlsppIn API
+  version: "1.0.0"
+  description: |
+    API description.
+paths:
+  /api:
+    get:
+      description: |
+        API's first route
+      operationId: firstRoute
+      responses:
+        "200":
+          description: Returns a message for testing purposes.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Welcome to the Slsppln API
+  /api/spec:
+    get:
+      description: |
+        Returns the specification for the API
+      operationId: apiSpec
+      responses:
+        "200":
+          description: Returns the specification
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Welcome to the Slsppln API
+  /api/filter/{model}/{attribute}:
+    get:
+      summary: Get filtered data from specific model.
+      parameters:
+        - in: path
+          name: model
+          schema:
+            type: string
+            example: funnel
+          required: true
+          description: Name of the model to get filtered data from
+        - in: path
+          name: attribute
+          schema:
+            type: string
+            example: name
+          required: true
+          description: Name of the attribute in model to get filtered data from
+        - in: query
+          name: value
+          schema:
+            type: string
+            example: Test
+          required: true
+          description: Value to look for inside attribute
+        - in: query
+          name: order
+          schema:
+            type: string
+            example: asc
+          required: true
+          description: Data order, asc or desc
+        - in: query
+          name: col
+          schema:
+            type: string
+            example: id
+          required: true
+          description: Column to order the data by
+      responses:
+        "200":
+          description: Returns the filtered data from the database
+          content:
+            application/json:
+              schema:
+                example: [
+                  {
+                      "id": 2,
+                      "name": "Test",
+                      "deal_id": 1,
+                      "createdAt": "2023-03-14T20:06:56.000Z",
+                      "updatedAt": "2023-03-14T20:06:56.000Z"
+                  },
+                  {
+                      "id": 1,
+                      "name": "Test",
+                      "deal_id": 1,
+                      "createdAt": "2023-03-14T20:06:04.000Z",
+                      "updatedAt": "2023-03-14T20:06:04.000Z"
+                  }
+              ]
+  /api/users/login:
+    post:
+      description: LogIn Route
+      requestBody:
+        description: Log user in.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLogIn"
+      responses:
+        "200":
+          description: Returns a response with access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserLogInRes"
+        "401":
+          description: Provided credentials are not valid.
+        "500":
+          description: Internal Server Error
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/users/register:
+    post:
+      description: Register a new user
+      responses:
+        "200":
+          description: Returns a response with access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRegister"
+        "401":
+          description: User already exists.
+        "500":
+          description: Internal Server Error
+  /api/funnels:
+    get:
+      description: Get all funnels
+      responses:
+        "200":
+          description: All funnels were returned succesfully
+          content:
+            application/json:
+              example: [
+                {
+                    "id": 1,
+                    "name": "Test",
+                    "deal_id": 1,
+                    "createdAt": "2023-03-14T20:06:04.000Z",
+                    "updatedAt": "2023-03-14T20:06:04.000Z",
+                    "Users": []
+                },
+                {
+                    "id": 2,
+                    "name": "Test",
+                    "deal_id": 1,
+                    "createdAt": "2023-03-14T20:06:56.000Z",
+                    "updatedAt": "2023-03-14T20:06:56.000Z",
+                    "Users": []
+                },
+                {
+                    "id": 3,
+                    "name": "Test",
+                    "deal_id": 1,
+                    "createdAt": "2023-03-16T20:19:36.000Z",
+                    "updatedAt": "2023-03-16T20:19:36.000Z",
+                    "Users": [
+                        {
+                            "id": 1,
+                            "full_name": "Juan Cadavid",
+                            "is_admin": false,
+                            "email": "test@test.com",
+                            "refresh_token": null,
+                            "createdAt": "2023-03-16T20:19:21.000Z",
+                            "updatedAt": "2023-03-16T20:19:21.000Z",
+                            "Funnel_User": {
+                                "createdAt": "2023-03-16T20:19:36.000Z",
+                                "updatedAt": "2023-03-16T20:19:36.000Z",
+                                "FunnelId": 3,
+                                "UserId": 1
+                            }
+                        }
+                    ]
+                }
+            ]
+    post:
+      description: Create a new funnel
+      requestBody:
+        description: Add new funnel
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Funnel"
+      responses:
+        "200":
+          description: Funnel was created succesfully
+          content:
+            application/json:
+              example: {
+                "id": 3,
+                "name": "Test",
+                "deal_id": 1,
+                "updatedAt": "2023-03-16T20:19:36.140Z",
+                "createdAt": "2023-03-16T20:19:36.140Z"
+            }
+        "404":
+          description: Provided email doesn't have a user.
+          content:
+            application/json:
+              example: {
+                  "message": "User was not found, cannot add Funnel"
+              }
+  /api/funnel/{idFunnel}:
+    patch:
+      description: Update Funnel name
+      requestBody:
+        description: Body containing new name
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FunnelNameUpdate"
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be updated
+      responses:
+        "200":
+          description: Funnel was succesfully updated
+  /api/funnel/stage/{idFunnel}:
+    post:
+      description: Creates a new Stage and links it to funnel using id
+      requestBody:
+        description: Contains Stage id
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FunnelStageUpdate"
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be updated
+      responses:
+        "200":
+          description: Funnel was succesfully updated
+    delete:
+      description: Deletes
+      requestBody:
+        description: Contains Stage id
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FunnelStageUpdate"
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be updated
+      responses:
+        "200":
+          description: Stage was successfully removed from Funnel
+  /api/funnel/user/{idFunnel}:
+    post:
+      description: Adds user to existing Funnel
+      requestBody:
+        description: Contains user email
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FunnelUserCreate"
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be updated
+      responses:
+        "200":
+          description: User was succesfully added to Funnel
+    delete:
+      description: Removes User from Funnel
+      requestBody:
+        description: Contains user email
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FunnelUserCreate"
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be updated
+      responses:
+        "200":
+          description: User was succesfully removed from Funnel
+  /api/leads:
+    get:
+      description: Get all existing Leads
+      responses:
+        "200":
+          description: All leads were retuned successfully
+          content:
+            application/json:
+              example: [
+                {
+                  "id": 5,
+                  "company": "webflow",
+                  "email": "contact@webflow.com",
+                  "full_name": "Luis Paul",
+                  "createdAt": "2023-03-23T14:22:02.000Z",
+                  "updatedAt": "2023-03-23T14:25:48.000Z"
+                },
+                {
+                  "id": 7,
+                  "company": "Marchi",
+                  "email": "contact@marchi.com",
+                  "full_name": "Vean Till",
+                  "createdAt": "2023-03-23T14:22:02.000Z",
+                  "updatedAt": "2023-03-23T14:25:48.000Z"
+                }
+              ]
+  /api/lead:
+    post:
+      description: Add new lead
+      requestBody:
+        description: Contains all information of lead
+        required: true
+        content:
+          application/json:
+            example: {
+                "company": "Marketing Agency",
+                "email": "contact@marketing.com",
+                "full_name": "Luis Miguel"
+              }
+      responses:
+        "200":
+          description: Lead was succesfully created  
+          content:
+            application/json:
+              example: {
+                "message": "new lead createds"
+              }
+  /api/lead/{leadId}:
+    get:
+      description: Get just one lead
+      parameters:
+        - in: path
+          name: leadId
+          schema:
+            type: integer
+            example: 5
+          required: true
+          description: Id of the lead to get
+      responses:
+        "200":
+          description: Lead was succesfully returned
+          content:
+            application/json:
+              example: {
+                "company": "Marketing Agency",
+                "email": "contact@marketing.com",
+                "full_name": "Luis Miguel"
+              }
+    patch:
+      description: Update one lead
+      parameters:
+        - in: path
+          name: leadId
+          schema:
+            type: integer
+            example: 5
+          required: true
+          description: Id of the lead to update
+      responses:
+        "200":
+          description: Lead was succesfully updated
+          content:
+            application/json:
+              example: {
+                "message": "lead updated"
+              }
+    delete:
+      description: Delete one lead
+      parameters:
+        - in: path
+          name: leadId
+          schema:
+            type: integer
+            example: 5
+          required: true
+          description: Id of the lead to delete
+      responses:
+        "200":
+          description: Lead was succesfully deleted
+          content:
+            application/json:
+              example: {
+                "message": "lead deleted"
+              }
+        
+components:
+  schemas:
+    Funnel:
+      required:
+        - name
+        - deal_id
+        - email
+      properties:
+        name:
+          type: string
+        deal_id:
+          type: integer
+        email:
+          type: string
+    UserRegister:
+      required:
+        - email
+        - password
+        - full_name
+        - is_admin
+      properties:
+        email:
+          type: string
+          example: myemail@test.com
+        password:
+          type: string
+          example: password
+        full_name:
+          type: string
+          example: John Doe
+        is_admin:
+          type: boolean
+          example: true
+    UserLogIn:
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: test@test.com
+        password:
+          type: string
+          example: Mypassword123
+    UserLogInRes:
+      properties:
+        message:
+          type: string
+          example: Login was successful!
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoidGVzdDJAdGVzdC5jb20iLCJpYXQiOjE2Nzg3NDA3ODJ9.a4BYPi5gTyhoy4u76NQSaMBfQO4RA2IpeDQ6ebn7Bmg
+    FunnelNameUpdate:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Funnel Name
+    FunnelStageUpdate:
+      required:
+        - idStage
+      properties:
+        idStage:
+          type: integer
+          example: 1
+    FunnelUserCreate:
+      required:
+        - emailUser
+      properties:
+        emailUser:
+          type: string
+          example: jhondoe@email.com
+          format: email
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

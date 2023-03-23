@@ -1,12 +1,13 @@
 "use strict";
 import { Model } from "sequelize";
 
-interface UserAttributes {
+export default interface UserAttributes {
   id: number;
   full_name: string;
   is_admin: boolean;
   email: string;
   password: string;
+  refresh_token: string;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -21,6 +22,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     is_admin: boolean;
     email!: string;
     password!: string;
+    refresh_token: string;
 
     static associate(models: any) {
       // define association here
@@ -47,10 +49,24 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      refresh_token: {
+        type: DataTypes.STRING(1200),
+        allowNull: true,
+      },
     },
     {
       sequelize,
       modelName: "User",
+      defaultScope: {
+        attributes: {
+          exclude: ["password"],
+        },
+      },
+      scopes: {
+        withPassword: {
+          attributes: { include: ["password"] },
+        },
+      },
     }
   );
   return User;

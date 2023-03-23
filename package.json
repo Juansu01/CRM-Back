@@ -8,6 +8,7 @@
     "@types/node": "^18.14.4",
     "accepts": "^1.3.8",
     "array-flatten": "^1.1.1",
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "bytes": "^3.1.2",
     "call-bind": "^1.0.2",
@@ -16,6 +17,7 @@
     "content-type": "^1.0.5",
     "cookie": "^0.5.0",
     "cookie-signature": "^1.0.6",
+    "cors": "^2.8.5",
     "debug": "^2.6.9",
     "depd": "^2.0.0",
     "destroy": "^1.2.0",
@@ -25,6 +27,7 @@
     "escape-html": "^1.0.3",
     "etag": "^1.8.1",
     "express": "^4.18.2",
+    "express-openapi-validator": "^5.0.3",
     "finalhandler": "^1.2.0",
     "forwarded": "^0.2.0",
     "fresh": "^0.5.2",
@@ -36,6 +39,7 @@
     "iconv-lite": "^0.4.24",
     "inherits": "^2.0.4",
     "ipaddr.js": "^1.9.1",
+    "jsonwebtoken": "^9.0.0",
     "media-typer": "^0.3.0",
     "merge-descriptors": "^1.0.1",
     "methods": "^1.1.2",
@@ -75,12 +79,15 @@
     "build": "rimraf dist && npx tsc",
     "prestart": "npm run build",
     "start": "node dist/app.js",
-    "preserve": "npm run build",
     "serve": "concurrently \"npx tsc -w\" \"nodemon dist/app.js\""
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/cors": "^2.8.13",
+    "@types/jsonwebtoken": "^9.0.1",
+    "email-validator": "^2.0.4",
     "nodemon": "^2.0.21"
   }
 }
