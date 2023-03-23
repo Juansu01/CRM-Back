@@ -273,7 +273,7 @@ paths:
       responses:
         "200":
           description: Stage was successfully removed from Funnel
-  /api//funnel/user/{idFunnel}:
+  /api/funnel/user/{idFunnel}:
     post:
       description: Adds user to existing Funnel
       requestBody:
@@ -314,6 +314,111 @@ paths:
       responses:
         "200":
           description: User was succesfully removed from Funnel
+  /api/leads:
+    get:
+      description: Get all existing Leads
+      responses:
+        "200":
+          description: All leads were retuned successfully
+          content:
+            application/json:
+              example: [
+                {
+                  "id": 5,
+                  "company": "webflow",
+                  "email": "contact@webflow.com",
+                  "full_name": "Luis Paul",
+                  "createdAt": "2023-03-23T14:22:02.000Z",
+                  "updatedAt": "2023-03-23T14:25:48.000Z"
+                },
+                {
+                  "id": 7,
+                  "company": "Marchi",
+                  "email": "contact@marchi.com",
+                  "full_name": "Vean Till",
+                  "createdAt": "2023-03-23T14:22:02.000Z",
+                  "updatedAt": "2023-03-23T14:25:48.000Z"
+                }
+              ]
+  /api/lead:
+    post:
+      description: Add new lead
+      requestBody:
+        description: Contains all information of lead
+        required: true
+        content:
+          application/json:
+            example: {
+                "company": "Marketing Agency",
+                "email": "contact@marketing.com",
+                "full_name": "Luis Miguel"
+              }
+      responses:
+        "200":
+          description: Lead was succesfully created  
+          content:
+            application/json:
+              example: {
+                "message": "new lead createds"
+              }
+  /api/lead/{leadId}:
+    get:
+      description: Get just one lead
+      parameters:
+        - in: path
+          name: leadId
+          schema:
+            type: integer
+            example: 5
+          required: true
+          description: Id of the lead to get
+      responses:
+        "200":
+          description: Lead was succesfully returned
+          content:
+            application/json:
+              example: {
+                "company": "Marketing Agency",
+                "email": "contact@marketing.com",
+                "full_name": "Luis Miguel"
+              }
+    patch:
+      description: Update one lead
+      parameters:
+        - in: path
+          name: leadId
+          schema:
+            type: integer
+            example: 5
+          required: true
+          description: Id of the lead to update
+      responses:
+        "200":
+          description: Lead was succesfully updated
+          content:
+            application/json:
+              example: {
+                "message": "lead updated"
+              }
+    delete:
+      description: Delete one lead
+      parameters:
+        - in: path
+          name: leadId
+          schema:
+            type: integer
+            example: 5
+          required: true
+          description: Id of the lead to delete
+      responses:
+        "200":
+          description: Lead was succesfully deleted
+          content:
+            application/json:
+              example: {
+                "message": "lead deleted"
+              }
+        
 components:
   schemas:
     Funnel:

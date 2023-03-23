@@ -5,7 +5,6 @@ import messageGenerator from "../services/messageGenerator";
 
 import { FunnelAttributes } from "../models/funnel";
 
-
 export const getAllFunnelsController = async (req: Request, res: Response) => {
   const funnels = await db.Funnel.findAll({
     include: [{ model: db.User }, { model: db.Stage }],
@@ -41,7 +40,6 @@ export const createNewFunnel = async (req: Request, res: Response) => {
       .json({ message: "User was not found, cannot add Funnel" });
   }
 };
-
 
 export const updateFunnelName = async (req: Request, res: Response) => {
   const idFunnel = req.params.idFunnel;
@@ -115,6 +113,8 @@ export const removeFunnelUser = async (req: Request, res: Response) => {
     res.json({ mesage: "user removed from funnel" });
   } catch (e) {
     res.status(500).json(messageGenerator(["errors", "server"]));
+  }
+};
 
 export const deleteFunnel = async (req: Request, res: Response) => {
   const { email } = req.body;
@@ -141,6 +141,5 @@ export const deleteFunnel = async (req: Request, res: Response) => {
     return res
       .status(404)
       .json({ message: "User was not found, cannot delete Funnel" });
-
   }
 };
