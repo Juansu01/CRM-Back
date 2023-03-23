@@ -1,14 +1,20 @@
 import { Router } from "express";
-// import filterModelController from "../controllers/filterModelController";
+import {
+  getAllLeads,
+  getOneLead,
+  postLead,
+  patchLead,
+  deleteLead,
+} from "../controllers/leadsControllers";
 
 const router = Router();
 
 // CRUD
-router.get("/leads");
-router.get("/lead/:leadId");
-router.post("/lead");
-router.patch("/lead/:leadId");
-router.delete("/lead/:leadId");
+router.get("/leads", getAllLeads);
+router.get("/lead/:leadId", getOneLead);
+router.post("/lead", postLead);
+router.patch("/lead/:leadId", patchLead);
+router.delete("/lead/:leadId", deleteLead);
 
 // Filtering
 
