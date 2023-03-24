@@ -232,6 +232,26 @@ paths:
       responses:
         "200":
           description: Funnel was succesfully updated
+    delete:
+      description: Deletes funnel
+      requestBody:
+        description: Contains Stage id
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FunnelDelete"
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be deleted
+      responses:
+        "200":
+          description: Funnel was succesfully updated
   /api/funnel/stage/{idFunnel}:
     post:
       description: Creates a new Stage and links it to funnel using id
@@ -478,6 +498,14 @@ components:
         name:
           type: string
           example: Funnel Name
+    FunnelDelete:
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          example: johndoe@test.com
     FunnelStageUpdate:
       required:
         - idStage

@@ -9,7 +9,7 @@ export const isAdmin = async (
   const userEmail = req.body.email;
 
   try {
-    const user = db.User.findOne({ email: userEmail });
+    const user = await db.User.findOne({ where: { email: userEmail } });
     if (!user) return res.status(404).json({ mesage: "user not found" });
     if (!user.is_admin)
       return res.status(404).json({ mesage: "user is not admin" });

@@ -10,13 +10,19 @@ const filterModelController = async (req: Request, res: Response) => {
   const queryConfig = {
     where: {},
     order: [[col, order.toUpperCase()]],
-    include: [{ model: db.User }, { model: db.Stage }],
   };
   let result;
 
+  queryConfig.where[attribute] = value;
+
   if (model === "funnel") {
-    queryConfig.where[attribute] = value;
+    queryConfig["include"] = [{ model: db.User }, { model: db.Stage }];
     result = await db.Funnel.findAll(queryConfig);
+  }
+
+  if (model === "lead") {
+    // queryConfig["include"] = { model: db.Deal };
+    result = await db.Lead.findAll(queryConfig);
   }
 
   return res.status(200).json(result);
