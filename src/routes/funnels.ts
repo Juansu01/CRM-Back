@@ -19,11 +19,7 @@ funnelRouter.delete("/funnel/:id/:email", isAdmin, deleteFunnel);
 funnelRouter.post("/funnels", isAdmin, createNewFunnel);
 funnelRouter.patch("/funnel/:idFunnel", isAdmin, updateFunnelName);
 funnelRouter.post("/funnel/stage/:idFunnel", isAdmin, addFunnelStage);
-funnelRouter.delete(
-  "/funnel/stage/:idFunnel/:email",
-  isAdmin,
-  removeFunnelStage
-);
+funnelRouter.delete("/funnel/stage/:idFunnel/:email", isAdmin, removeFunnelStage);
 funnelRouter.post("/funnel/user/:idFunnel", isAdmin, addFunnelUser);
 funnelRouter.delete("/funnel/user/:idFunnel/:email", isAdmin, removeFunnelUser);
 
