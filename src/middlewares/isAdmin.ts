@@ -6,16 +6,17 @@ export const isAdmin = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userEmail = req.body.email;
+  const userEmail = req.body.email || req.params.email;
 
   try {
     const user = await db.User.findOne({ where: { email: userEmail } });
-    if (!user) return res.status(404).json({ mesage: "user not found" });
+    if (!user) return res.status(404).json({ message: "user not found" });
     if (!user.is_admin)
-      return res.status(404).json({ mesage: "user is not admin" });
+      return res.status(404).json({ message: "user is not admin" });
     next();
   } catch (e) {
-    res.status(500).json({ mesage: "Internal server error" });
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
