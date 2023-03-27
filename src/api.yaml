@@ -417,8 +417,69 @@ paths:
             application/json:
               example: {
                 "message": "lead deleted"
-              }
-        
+              }      
+  /api/leads/order:
+    get:
+      description: Order leads by full_name, email, company
+      parameters:
+        - in: query
+          name: o
+          schema:
+            type: string
+          description: What you want to order, name, email, or company
+        - in: query
+          name: m
+          schema:
+            type: string
+          description: DESC or ASC
+      responses:
+        "200":
+          description: Leads ordered successfully
+          content:
+            application/json: 
+              example: [
+                {
+                    "company": "Marketing Agency",
+                    "email": "contact@marketing.com",
+                    "full_name": "Luis Miguel"
+                  },
+                  {
+                    "company": "Marketing Agency",
+                    "email": "contact@marketing.com",
+                    "full_name": "Luis Miguel"
+                  }
+                ]
+  /api/leads/filter:
+    get:
+      description: Filter leads by full_name, email, company
+      parameters:
+        - in: query
+          name: f
+          schema:
+            type: string
+          description: What you want to filter, name, email, or company
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: search what the user wants
+      responses:
+        "200":
+          description: Leads ordered successfully
+          content:
+            application/json: 
+              example: [
+                {
+                    "company": "Marketing Agency",
+                    "email": "contact@marketing.com",
+                    "full_name": "Luis Miguel"
+                  },
+                  {
+                    "company": "Marketing Agency",
+                    "email": "contact@marketing.com",
+                    "full_name": "Luis Miguel"
+                  }
+                ]
 components:
   schemas:
     Funnel:
