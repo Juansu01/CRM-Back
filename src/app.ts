@@ -8,9 +8,11 @@ import db from "./models";
 import cors from "cors";
 import routes from "./routes/index";
 import * as OpenApiValidator from "express-openapi-validator";
+import multer from "multer";
 
 const port = process.env.PORT || 4000;
 const app: Express = express();
+export const upload = multer();
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.error(err);
   res.status(err.status || 500).json({
@@ -19,9 +21,11 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   });
 };
 
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(upload.array("logo"));
+
 app.use(
   OpenApiValidator.middleware({
     apiSpec: "./src/api.yaml",
