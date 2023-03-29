@@ -232,6 +232,28 @@ paths:
       responses:
         "200":
           description: Funnel was succesfully updated
+  /api/funnel/{idFunnel}/{email}:
+    delete:
+        description: Deletes funnel
+        parameters:
+          - in: path
+            name: idFunnel
+            schema:
+              type: integer
+              example: 1
+            required: true
+            description: Id of the funnel to be deleted
+          - in: path
+            name: email
+            schema:
+              type: string
+              format: email
+              example: johndoe@gmail.com
+            required: true
+            description: Email of user who is making the request
+        responses:
+          "200":
+            description: Funnel was succesfully deleted
   /api/funnel/stage/{idFunnel}:
     post:
       description: Creates a new Stage and links it to funnel using id
@@ -252,16 +274,10 @@ paths:
           description: Id of the funnel to be updated
       responses:
         "200":
-          description: Funnel was succesfully updated
+          description: Stage added to funnel
+  /api/funnel/stage/{idFunnel}/{email}:
     delete:
       description: Deletes
-      requestBody:
-        description: Contains Stage id
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/FunnelStageUpdate"
       parameters:
         - in: path
           name: idFunnel
@@ -270,9 +286,38 @@ paths:
             example: 1
           required: true
           description: Id of the funnel to be updated
+        - in: path
+          name: email
+          schema:
+            type: string
+            format: email
+            example: johndoe@gmail.com
+          required: true
+          description: Email of user who is making the request
       responses:
         "200":
           description: Stage was successfully removed from Funnel
+  /api/funnel/user/{idFunnel}/{email}:
+    delete:
+        description: Removes User from Funnel
+        parameters:
+          - in: path
+            name: idFunnel
+            schema:
+              type: integer
+              example: 1
+            required: true
+            description: Id of the funnel to be updated
+          - in: path
+            name: email
+            schema:
+              type: string
+              example: johndoe@gmail.com
+            required: true
+            description: Email of user making the request
+        responses:
+          "200":
+            description: User was succesfully removed from Funnel
   /api/funnel/user/{idFunnel}:
     post:
       description: Adds user to existing Funnel
@@ -294,26 +339,6 @@ paths:
       responses:
         "200":
           description: User was succesfully added to Funnel
-    delete:
-      description: Removes User from Funnel
-      requestBody:
-        description: Contains user email
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/FunnelUserCreate"
-      parameters:
-        - in: path
-          name: idFunnel
-          schema:
-            type: integer
-            example: 1
-          required: true
-          description: Id of the funnel to be updated
-      responses:
-        "200":
-          description: User was succesfully removed from Funnel
   /api/leads:
     get:
       description: Get all existing Leads
@@ -417,6 +442,7 @@ paths:
             application/json:
               example: {
                 "message": "lead deleted"
+
               }      
   /api/leads/order:
     get:
@@ -480,6 +506,9 @@ paths:
                     "full_name": "Luis Miguel"
                   }
                 ]
+
+              }
+          
 components:
   schemas:
     Funnel:

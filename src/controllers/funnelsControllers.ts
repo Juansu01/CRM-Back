@@ -18,26 +18,19 @@ export const createNewFunnel = async (req: Request, res: Response) => {
   const user = await db.User.findOne({ where: { email } });
   let newFunnel: FunnelAttributes;
 
-  if (user) {
-    if (user.is_admin) {
-      newFunnel = await db.Funnel.create({
-        name,
-        deal_id,
-      });
-    } else {
-      return res.status(401).json({ message: "User is not an admin" });
-    }
+  newFunnel = await db.Funnel.create({
+    name,
+    deal_id,
+  });
 
-    if (newFunnel) {
-      await user.addFunnel(newFunnel);
-      return res.status(200).json(newFunnel);
-    } else {
-      return res.status(500).json({ message: "Internal server error" });
-    }
+  if (newFunnel) {
+    await user.addFunnel(newFunnel);
+    return res.status(200).json({
+      message: "New Funnel successfully created",
+      funnel: newFunnel,
+    });
   } else {
-    return res
-      .status(404)
-      .json({ message: "User was not found, cannot add Funnel" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -117,29 +110,15 @@ export const removeFunnelUser = async (req: Request, res: Response) => {
 };
 
 export const deleteFunnel = async (req: Request, res: Response) => {
-  const { email } = req.body;
   const funnelId = +req.params.id;
-  const user = await db.User.findOne({ where: { email } });
+  const funnel = await db.Funnel.findOne({ where: { id: funnelId } });
 
-  if (user) {
-    const funnel = await db.Funnel.findOne({ where: { id: funnelId } });
-    if (funnel) {
-      if (user.is_admin) {
-        await funnel.destroy();
-        return res.status(200).json({ message: "Funnel succesfully deleted." });
-      } else {
-        return res
-          .status(401)
-          .json({ message: "User is not an admin, cannot delete" });
-      }
-    } else {
-      return res
-        .status(404)
-        .json({ message: "Funnel was not found, cannot delete" });
-    }
+  if (funnel) {
+    await funnel.destroy();
+    return res.status(200).json({ message: "Funnel succesfully deleted." });
   } else {
     return res
       .status(404)
-      .json({ message: "User was not found, cannot delete Funnel" });
+      .json({ message: "Funnel was not found, cannot delete" });
   }
 };

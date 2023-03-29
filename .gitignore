@@ -30,7 +30,7 @@ tsconfig.build.json
 .awcache
 
 # Generated source-code #
-src/**/*.js
+# src/**/*.js
 src/**/*.js.map
 !src/public/**/*
 test/**/*.js
@@ -39,4 +39,4 @@ coverage/
 !test/preprocessor.js
 mydb.sql
 
-src/config
+# src/config
