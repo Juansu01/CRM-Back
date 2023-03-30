@@ -31,6 +31,7 @@ app.use(
     apiSpec: "./src/api.yaml",
     validateRequests: true,
     validateResponses: false,
+    ignoreUndocumented: true,
   })
 );
 
