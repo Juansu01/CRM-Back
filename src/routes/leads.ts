@@ -5,6 +5,8 @@ import {
   postLead,
   patchLead,
   deleteLead,
+  orderLeads,
+  filterLeads,
 } from "../controllers/leadsControllers";
 
 import { emailExistsLead } from "../middlewares/emailExists";
@@ -19,5 +21,7 @@ router.patch("/lead/:leadId", patchLead);
 router.delete("/lead/:leadId", deleteLead);
 
 // Filtering
+router.get("/leads/order", orderLeads);
+router.get("/leads/filter", filterLeads);
 
 export default router;

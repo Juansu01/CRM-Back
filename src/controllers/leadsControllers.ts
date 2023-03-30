@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import db from "../models";
 import messageGenerator from "../services/messageGenerator";
+import { Op } from "sequelize";
 
 export const getAllLeads = async (_req: Request, res: Response) => {
   try {
@@ -55,6 +56,42 @@ export const deleteLead = async (req: Request, res: Response) => {
   try {
     await db.Lead.destroy({ where: { id: leadId } });
     res.json(messageGenerator([], "lead deleted"));
+  } catch (e) {
+    return res.status(500).json(messageGenerator(["errors", "server"]));
+  }
+};
+
+export const orderLeads = async (req: Request, res: Response) => {
+  const { o, m } = req.query;
+
+  try {
+    const leads = await db.Lead.findAll({
+      order: [[o, m]],
+    });
+
+    if (!leads || leads.length === 0)
+      return res.status(404).json(messageGenerator([], "no funnels found"));
+    res.json(leads);
+  } catch (e) {
+    return res.status(500).json(messageGenerator(["errors", "server"]));
+  }
+};
+
+export const filterLeads = async (req: Request, res: Response) => {
+  const { f, q } = req.query;
+
+  try {
+    const leads = await db.Lead.findAll({
+      where: {
+        [`${f}`]: {
+          [Op.like]: `%${q}%`,
+        },
+      },
+    });
+
+    if (!leads || leads.length === 0)
+      return res.status(404).json(messageGenerator([], "no funnels found"));
+    res.json(leads);
   } catch (e) {
     return res.status(500).json(messageGenerator(["errors", "server"]));
   }
