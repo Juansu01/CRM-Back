@@ -19,14 +19,16 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   });
 };
 
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
 app.use(
   OpenApiValidator.middleware({
     apiSpec: "./src/api.yaml",
     validateRequests: true,
     validateResponses: false,
+    ignoreUndocumented: true,
   })
 );
 

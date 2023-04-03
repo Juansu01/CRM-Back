@@ -508,7 +508,12 @@ paths:
                 ]
 
               }
-          
+  /api/deals:
+    get:
+      description: Get all deals
+      responses:
+        "200":
+          description: All deals successfully retrieved
 components:
   schemas:
     Funnel:
@@ -583,6 +588,41 @@ components:
           type: string
           example: jhondoe@email.com
           format: email
+    CreateDeal:
+      required:
+        - name
+        - company_name
+        - deal_value_estimation
+        - description
+        - order
+      properties:
+        user_id:
+          type: string
+          example: 1
+        company_name:
+          type: string
+          example: Meta
+        deal_value_estimation:
+          type: string
+          example: 200
+        description:
+          type: string
+          example: My Description
+        funnel_id:
+          type: string
+          example: 2
+        lead_id:
+          type: string
+          example: 1
+        name:
+          type: string
+          example: MyDeal
+        order:
+          type: string
+          example: 23
+        status_id:
+          type: string
+          example: 3
     Error:
       required:
         - code
