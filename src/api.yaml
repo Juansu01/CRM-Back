@@ -506,8 +506,6 @@ paths:
                     "full_name": "Luis Miguel"
                   }
                 ]
-
-              }
   /api/deals:
     get:
       description: Get all deals
