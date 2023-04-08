@@ -82,7 +82,6 @@ export const createDeal = async (req: Request, res: Response) => {
 export const deleteDeal = async (req: Request, res: Response) => {
   const id = req.params.id;
   const dealToDelete = await db.Deal.findByPk(id);
-  console.log("You hit the delete endpoint");
 
   if (dealToDelete) {
     const imageToDelete = dealToDelete.name + dealToDelete.company_name;
