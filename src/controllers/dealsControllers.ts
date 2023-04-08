@@ -17,7 +17,7 @@ export const getAllDeals = async (req: Request, res: Response) => {
 
 export const getDeal = async (req: Request, res: Response) => {
   const id = req.params.id;
-  const deal = await db.Deal.findByPk(id);
+  const deal = await db.Deal.findByPk(id, { include: { model: db.User } });
 
   if (deal) {
     return res
@@ -136,5 +136,34 @@ export const updateDeal = async (req: Request, res: Response) => {
       .json({ message: "Deal succesfully updated", deal: dealToUpdate });
   } else {
     return res.status(404).json({ message: "Deal not found." });
+  }
+};
+
+export const addUserToDeal = async (req: Request, res: Response) => {
+  const dealId = req.params.dealId;
+  const userId = req.params.userId;
+  const deal = await db.Deal.findByPk(dealId, {
+    include: [{ model: db.User }],
+  });
+
+  if (deal) {
+    const user = await db.User.findByPk(userId);
+    if (user) {
+      const dealUsers = await deal.getUsers();
+      const userAlreadyInDeal = await dealUsers.some(
+        (user) => user.id === +userId
+      );
+      if (userAlreadyInDeal) {
+        return res.status(401).json({ message: "User already in Deal." });
+      }
+      await deal.addUser(user);
+      return res
+        .status(200)
+        .json({ message: "User successfully added to Deal." });
+    } else {
+      return res.status(404).json({ message: "User was not found" });
+    }
+  } else {
+    return res.status(404).json({ message: "Deal was not found." });
   }
 };
