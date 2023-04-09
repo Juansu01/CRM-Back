@@ -9,7 +9,12 @@ import {
 
 export const getAllDeals = async (req: Request, res: Response) => {
   const allDeals = await db.Deal.findAll({
-    include: [{ model: db.Funnel }, { model: db.User }, { model: db.Lead }],
+    include: [
+      { model: db.Funnel },
+      { model: db.User },
+      { model: db.Lead },
+      { model: db.Stage },
+    ],
   });
 
   return res.status(200).json(allDeals);
@@ -161,6 +166,91 @@ export const addUserToDeal = async (req: Request, res: Response) => {
         .json({ message: "User successfully added to Deal." });
     } else {
       return res.status(404).json({ message: "User was not found" });
+    }
+  } else {
+    return res.status(404).json({ message: "Deal was not found." });
+  }
+};
+
+export const removeUserFromDeal = async (req: Request, res: Response) => {
+  const dealId = req.params.dealId;
+  const userId = req.params.userId;
+  const deal = await db.Deal.findByPk(dealId, {
+    include: [{ model: db.User }],
+  });
+
+  if (deal) {
+    const user = await db.User.findByPk(userId);
+    if (user) {
+      const dealUsers = await deal.getUsers();
+      const userInDeal = await dealUsers.some((user) => user.id === +userId);
+      if (userInDeal) {
+        await deal.removeUser(user);
+        return res
+          .status(200)
+          .json({ message: "User successfully removed from Deal." });
+      }
+      return res.status(401).json({ message: "User is not in Deal." });
+    } else {
+      return res.status(404).json({ message: "User was not found" });
+    }
+  } else {
+    return res.status(404).json({ message: "Deal was not found." });
+  }
+};
+
+export const addStageToDeal = async (req: Request, res: Response) => {
+  const dealId = req.params.dealId;
+  const stageId = req.params.stageId;
+  const deal = await db.Deal.findByPk(dealId, {
+    include: [{ model: db.Stage }],
+  });
+
+  if (deal) {
+    const stage = await db.Stage.findByPk(stageId);
+    if (stage) {
+      const dealStages = await deal.getStages();
+      const stageAlreadyInDeal = await dealStages.some(
+        (stage) => stage.id === +stageId
+      );
+      if (stageAlreadyInDeal) {
+        return res.status(401).json({ message: "Stage already in Deal." });
+      }
+      await deal.addStage(stage);
+      return res
+        .status(200)
+        .json({ message: "Stage successfully added to Deal." });
+    } else {
+      return res.status(404).json({ message: "Stage was not found" });
+    }
+  } else {
+    return res.status(404).json({ message: "Deal was not found." });
+  }
+};
+
+export const removeStageFromDeal = async (req: Request, res: Response) => {
+  const dealId = req.params.dealId;
+  const stageId = req.params.stageId;
+  const deal = await db.Deal.findByPk(dealId, {
+    include: [{ model: db.Stage }],
+  });
+
+  if (deal) {
+    const stage = await db.Stage.findByPk(stageId);
+    if (stage) {
+      const dealStages = await deal.getStages();
+      const stageInDeal = await dealStages.some(
+        (stage) => stage.id === +stageId
+      );
+      if (stageInDeal) {
+        await deal.removeUser(stage);
+        return res
+          .status(200)
+          .json({ message: "Stage successfully removed from Deal." });
+      }
+      return res.status(401).json({ message: "Stage is not in Deal." });
+    } else {
+      return res.status(404).json({ message: "Stage was not found" });
     }
   } else {
     return res.status(404).json({ message: "Deal was not found." });
