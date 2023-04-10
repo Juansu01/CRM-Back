@@ -23,13 +23,18 @@ export const deleteImageFromLocalStorage = (name: string): void => {
   }
 };
 
-export const uploadImageToCloudinary = async (
-  name: string,
-  public_id: string
-) => {
+export const uploadImageToCloudinary = async (name: string) => {
   const path = `deal_images/${name}`;
   const result = await cloudinary.uploader.upload(path, {
-    public_id: public_id,
+    public_id: name,
   });
   return result;
+};
+
+export const deleteImageFromCloudinary = (imgName: string) => {
+  cloudinary.uploader.destroy(imgName, (error, result: Object) => {
+    if (error) {
+      console.error(error);
+    }
+  });
 };
