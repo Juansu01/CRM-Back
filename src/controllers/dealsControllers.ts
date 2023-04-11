@@ -73,14 +73,14 @@ export const createDeal = async (req: Request, res: Response) => {
           .json({ message: "Deal created succesfully.", deal: newDeal });
       } else {
         return res.status(207).json({
-          message: "User not found, won' add to new Deal",
+          message: "User not found, won't add to new Deal.",
           deal: newDeal,
         });
       }
     }
   } else {
-    console.error("Couldn't upload image to Cloudinary");
-    res.status(500).json({ message: "Couldn't upload image to Cloudinary" });
+    console.error("Couldn't upload image to Cloudinary.");
+    res.status(500).json({ message: "Couldn't upload image to Cloudinary." });
   }
 };
 

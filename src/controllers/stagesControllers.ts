@@ -21,13 +21,26 @@ export const getAllStages = async (req: Request, res: Response) => {
 };
 
 export const createStage = async (req: Request, res: Response) => {
-  const { color, name } = req.body;
+  const { color, name, deal_id } = req.body;
   const newStage = await db.create({
     color,
     name,
   });
 
   if (newStage) {
+    if (deal_id) {
+      const deal = await db.Deal.findByPk(deal_id);
+      if (deal) {
+        await deal.addStage(newStage);
+      } else {
+        return res
+          .status(207)
+          .json({
+            message: "Deal was not found, created Stage with no Deal.",
+            stage: newStage,
+          });
+      }
+    }
     return res.json({
       message: "Stage was successfully created.",
       stage: newStage,
