@@ -15,14 +15,14 @@ export const getStage = async (req: Request, res: Response) => {
 };
 
 export const getAllStages = async (req: Request, res: Response) => {
-  const allStages = await db.Stage.FindAll();
+  const allStages = await db.Stage.findAll();
 
   return res.status(200).json(allStages);
 };
 
 export const createStage = async (req: Request, res: Response) => {
   const { color, name, deal_id } = req.body;
-  const newStage = await db.create({
+  const newStage = await db.Stage.create({
     color,
     name,
   });
@@ -33,12 +33,10 @@ export const createStage = async (req: Request, res: Response) => {
       if (deal) {
         await deal.addStage(newStage);
       } else {
-        return res
-          .status(207)
-          .json({
-            message: "Deal was not found, created Stage with no Deal.",
-            stage: newStage,
-          });
+        return res.status(207).json({
+          message: "Deal was not found, created Stage with no Deal.",
+          stage: newStage,
+        });
       }
     }
     return res.json({

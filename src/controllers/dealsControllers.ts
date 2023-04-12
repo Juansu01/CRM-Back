@@ -22,7 +22,14 @@ export const getAllDeals = async (req: Request, res: Response) => {
 
 export const getDeal = async (req: Request, res: Response) => {
   const id = req.params.id;
-  const deal = await db.Deal.findByPk(id, { include: { model: db.User } });
+  const deal = await db.Deal.findByPk(id, {
+    include: [
+      { model: db.Funnel },
+      { model: db.User },
+      { model: db.Lead },
+      { model: db.Stage },
+    ],
+  });
 
   if (deal) {
     return res
@@ -243,7 +250,7 @@ export const removeStageFromDeal = async (req: Request, res: Response) => {
         (stage) => stage.id === +stageId
       );
       if (stageInDeal) {
-        await deal.removeUser(stage);
+        await deal.removeStage(stage);
         return res
           .status(200)
           .json({ message: "Stage successfully removed from Deal." });
