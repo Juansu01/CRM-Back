@@ -42,8 +42,14 @@ routes.forEach((route) => {
 
 app.use(errorHandler);
 
-db.sequelize.authenticate().then(() => {
-  app.listen(port, () => {
-    console.log(`Connected to database and app is listening on port ${port}`);
+db.sequelize.authenticate()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Connected to database and app is listening on port ${port}`);
+    })
+  })
+  .catch((error) => {
+    console.error('Unable to connect to the database:', error)
   });
-});
+
+db.sequelize.sync().then()
