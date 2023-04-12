@@ -4,6 +4,7 @@ import funnelRouter from "./funnels";
 import filterRouter from "./filter";
 import leadsRouter from "./leads";
 import dealsRouter from "./deals";
+import stagesRouter from "./stages";
 
 export default [
   sessionAndRegistration,
@@ -12,4 +13,5 @@ export default [
   filterRouter,
   refreshToken,
   dealsRouter,
+  stagesRouter,
 ];
