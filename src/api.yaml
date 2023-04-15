@@ -105,7 +105,7 @@ paths:
     post:
       summary: Login Route.
       tags:
-        - users
+        - Users
       description: LogIn Route
       requestBody:
         description: Log user in.
@@ -135,7 +135,7 @@ paths:
     post:
       summary: Register a new user.
       tags:
-        - users
+        - Users
       description: Register a new user
       responses:
         "200":
@@ -152,7 +152,7 @@ paths:
     get:
       summary: Get all Funnels.
       tags:
-        - funnels
+        - Funnels
       description: Get all funnels
       responses:
         "200":
@@ -207,7 +207,7 @@ paths:
     post:
       summary: Create a new Funnel.
       tags:
-        - funnels
+        - Funnels
       description: Create a new funnel.
       requestBody:
         description: Add new funnel
@@ -238,7 +238,7 @@ paths:
     patch:
       summary: Update Funnel name.
       tags:
-        - funnels
+        - Funnels
       description: Update Funnel name
       requestBody:
         description: Body containing new name
@@ -262,7 +262,7 @@ paths:
     delete:
       summary: Remove Funnels.
       tags:
-        - funnels
+        - Funnels
       description: Delete funnels.
       parameters:
         - in: path
@@ -287,7 +287,7 @@ paths:
     post:
       summary: Create a new Stage and links it to Funnel using id.
       tags:
-        - funnels
+        - Funnels
       description: Creates a new Stage and links it to funnel using id
       requestBody:
         description: Contains Stage id
@@ -311,7 +311,7 @@ paths:
     delete:
       summary: Remove Stage and from Funnel.
       tags:
-        - funnels
+        - Funnels
       description: Delete
       parameters:
         - in: path
@@ -336,7 +336,7 @@ paths:
     delete:
       summary: Remove Users from Funnel
       tags:
-        - funnels
+        - Funnels
       description: Remove Users from Funnel.
       parameters:
         - in: path
@@ -360,7 +360,7 @@ paths:
     post:
       summary: Add Users from Funnel
       tags:
-        - funnels
+        - Funnels
       description: Add users to existing Funnel
       requestBody:
         description: Contain user emails
@@ -384,7 +384,7 @@ paths:
     get:
       summary: Get all Leads
       tags:
-        - leads
+        - Leads
       description: Get all existing Leads
       responses:
         "200":
@@ -414,7 +414,7 @@ paths:
     post:
       summary: Add new Leads
       tags:
-        - leads
+        - Leads
       description: Add new lead
       requestBody:
         description: Contains all information of lead
@@ -437,7 +437,7 @@ paths:
     get:
       summary: Get one Lead
       tags:
-        - leads
+        - Leads
       description: Get just one lead
       parameters:
         - in: path
@@ -461,7 +461,7 @@ paths:
     patch:
       summary: Update one Leads
       tags:
-        - leads
+        - Leads
       description: Update one lead
       parameters:
         - in: path
@@ -480,7 +480,7 @@ paths:
     delete:
       summary: Remove one Lead
       tags:
-        - leads
+        - Leads
       description: Delete one lead
       parameters:
         - in: path
@@ -500,7 +500,7 @@ paths:
     get:
       summary: Get Leads sorted by name, email, company
       tags:
-        - leads
+        - Leads
       description: Order leads by full_name, email, company
       parameters:
         - in: query
@@ -536,7 +536,7 @@ paths:
     get:
       summary: Filter Leads by name, email, company
       tags:
-        - leads
+        - Leads
       description: Filter leads by full_name, email, company
       parameters:
         - in: query
@@ -571,17 +571,226 @@ paths:
     get:
       summary: Get all Deals
       tags:
-        - deals
+        - Deals
       description: Get all deals
       responses:
         "200":
           description: All deals successfully retrieved
-
+  /api/deal/{id}:
+    get:
+      description: Get a deal based on id
+      summary: Get a Deal by id
+      tags:
+        - Deals
+      parameters:
+        - name: id
+          in: path
+          description: Id of deal to fetch
+          required: true
+          schema:
+            type: integer
+            example: 5
+      responses:
+        "200":
+          description: Deal successfully found.
+    delete:
+      description: Delete deal by id.
+      summary: Delete deal by id
+      tags:
+        - Deals
+      parameters:
+        - name: id
+          in: path
+          description: Id of deal to delete
+          required: true
+          schema:
+            type: integer
+            example: 5
+      responses:
+        "200":
+          description: Successfully deleted deal
+  /api/deal/{dealId}/addUser/{userId}:
+    post:
+      tags:
+        - Deals
+      description: Add existing User to existing Deal.
+      summary: Add user to deal
+      parameters:
+       - name: dealId
+         in: path
+         description: Id of Deal to link with User
+         required: true
+         schema:
+          type: integer
+          example: 4
+       - name: userId
+         in: path
+         description: Id of User to link with Deal
+         required: true
+         schema:
+          type: integer
+          example: 4
+      responses:
+        "200":
+          description: User successfully added to deal.
+  /api/deal/{dealId}/removeUser/{userId}:
+    delete:
+      tags:
+        - Deals
+      description: Delete User from Deal.
+      summary: Remove user from Deal
+      parameters:
+       - name: dealId
+         in: path
+         description: Id of Deal to update
+         required: true
+         schema:
+          type: integer
+          example: 4
+       - name: userId
+         in: path
+         description: Id of User to remove from Deal.
+         required: true
+         schema:
+          type: integer
+          example: 4
+      responses:
+        "200":
+          description: User successfully removed from deal.
+  /api/deal/{dealId}/addStage/{stageId}:
+    post:
+      tags:
+        - Deals
+      description: Add existing User to existing Deal.
+      summary: Add stage to deal
+      parameters:
+       - name: dealId
+         in: path
+         description: Id of Deal to link with Stage
+         required: true
+         schema:
+          type: integer
+          example: 4
+       - name: stageId
+         in: path
+         description: Id of Stage to link with Deal
+         required: true
+         schema:
+          type: integer
+          example: 4
+      responses:
+        "200":
+          description: Stage successfully added to deal.
+  /api/deal/{dealId}/removeStage/{stageId}:
+    delete:
+      tags:
+        - Deals
+      description: Delete Stage from Deal.
+      summary: Remove stage from deal
+      parameters:
+       - name: dealId
+         in: path
+         description: Id of Deal to update
+         required: true
+         schema:
+          type: integer
+          example: 4
+       - name: stageId
+         in: path
+         description: Id of Stage to remove from Deal.
+         required: true
+         schema:
+          type: integer
+          example: 4
+      responses:
+        "200":
+          description: Stage successfully removed from deal.
+  /api/stages:
+    get:
+      tags:
+        - Stages
+      description: Get all Stages
+      summary: Get all Stages
+      responses:
+        "200":
+          description: All Stages successfully retrieved
+  /api/stage:
+    post:
+      tags:
+        - Stages
+      summary: Create a new Stage
+      description: Create a new Stage
+      requestBody:
+        description: Stage request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewStage"
+      responses:
+        "200":
+          description: Stage created successfully.
+  /api/stage/{id}:
+    get:
+      tags:
+        - Stages
+      summary: Get specific Stage by id
+      description: Get a specific deal by id
+      parameters:
+        - name: id
+          in: path
+          description: Id of stage to fetch
+          required: true
+          schema:
+            type: integer
+            example: 3
+      responses:
+        "200":
+          description: Stage successfully retrieved
+    patch:
+      tags:
+        - Stages
+      summary: Update Stage by id
+      description: Update Stage by id
+      requestBody:
+        description: Stage request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStage"
+      parameters:
+        - name: id
+          in: path
+          description: Id of stage to update
+          required: true
+          schema:
+            type: integer
+            example: 3
+      responses:
+        "200":
+          description: Stage successfully retrieved
+    delete:
+      summary: Delete Stage by id
+      tags:
+        - Stages
+      description: Delete Stage by id.
+      parameters:
+        - name: id
+          in: path
+          description: Id of stage to delete
+          required: true
+          schema:
+            type: integer
+            example: 3
+      responses:
+        "200":
+          description: Stage successfully deleted.
   /api/notes:
     get:
       summary: Get all Notes
       tags:
-        - note
+        - Notes
       description: Get all notes
       responses:
         "200":
@@ -609,7 +818,7 @@ paths:
     get:
       summary: Get one Note
       tags:
-        - note
+        - Notes
       description: Get just one note
       parameters:
         - in: path
@@ -637,7 +846,7 @@ paths:
     post:
       summary: Create note
       tags:
-        - note
+        - Notes
       description: Add new note
       parameters:
         - in: path
@@ -665,7 +874,7 @@ paths:
     patch:
       summary: Update one Note
       tags:
-        - note
+        - Notes
       description: Update note
       parameters:
         - in: path
@@ -689,7 +898,7 @@ paths:
     delete:
       summary: Remove Note from Deal Id
       tags:
-        - note
+        - Notes
       description: Delete note
       parameters:
         - in: path
@@ -707,6 +916,109 @@ paths:
               example: { "message": "Note deleted successfully" }
 components:
   schemas:
+    CreateNote:
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          example: Note of the deal.
+    UpdateStage:
+      properties:
+        color:
+          type: string
+          example: Red
+        name:
+          type: string
+          example: Finished
+    NewStage:
+      required:
+        - color
+        - name
+      properties:
+        color:
+          type: string
+          example: Red
+        name:
+          type: string
+          example: Finished
+        deal_id:
+          type: integer
+          example: 6
+          description: Optional deal_id to link Deal with new Stage.
+    PatchDeal:
+      properties:
+        user_id:
+          type: integer
+          example: 5
+        company_name:
+          type: string
+          example: Meta
+        deal_value_estimation:
+          type: integer
+          example: 300
+        description:
+          type: string
+          example: This is your description
+        funnel_id:
+          type: integer
+          example: 5
+        lead_id:
+          type: integer
+          example: 5
+        name:
+          type: string
+          example: Deal with Microsoft
+        logo:
+          type: string
+          format: binary
+          example: This is where you put a logo image for the deal
+        order:
+          type: integer
+          example: 7
+        status_id:
+          type: integer
+          example: 7
+    NewDeal:
+      required:
+        - company_name
+        - deal_value_estimation
+        - description
+        - name
+        - logo
+        - order
+      properties:
+        user_id:
+          type: integer
+          example: 5
+        company_name:
+          type: string
+          example: Meta
+        deal_value_estimation:
+          type: string
+          example: 300
+        description:
+          type: string
+          example: This is your description
+        funnel_id:
+          type: integer
+          example: 5
+        lead_id:
+          type: integer
+          example: 5
+        name:
+          type: string
+          example: Deal with Microsoft
+        logo:
+          type: string
+          format: binary
+          example: This is where you put a logo image for the deal
+        order:
+          type: string
+          example: 7
+        status_id:
+          type: integer
+          example: 7
     Funnel:
       required:
         - name
@@ -795,13 +1107,13 @@ components:
           example: Meta
         deal_value_estimation:
           type: string
-          example: 200
+          example: "200"
         description:
           type: string
           example: My Description
         funnel_id:
           type: string
-          example: 2
+          example: "2"
         lead_id:
           type: string
           example: 1
@@ -810,17 +1122,10 @@ components:
           example: MyDeal
         order:
           type: string
-          example: 23
+          example: "23"
         status_id:
           type: string
           example: 3
-    CreateNote:
-      required:
-        - content
-      properties:
-        content:
-          type: string
-          example: Note of the deal.
     Error:
       required:
         - code
