@@ -10,7 +10,7 @@ interface MagicUserInvitationAttributes {
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
-  class MagicUser extends Model<MagicUserInvitationAttributes> {
+  class MagicUserInvitation extends Model<MagicUserInvitationAttributes> {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -25,7 +25,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       // define association here
     }
   }
-  MagicUser.init(
+  MagicUserInvitation.init(
     {
       id: {
         allowNull: false,
@@ -43,5 +43,5 @@ module.exports = (sequelize: any, DataTypes: any) => {
       modelName: "MagicUserInvitation",
     }
   );
-  return MagicUser;
+  return MagicUserInvitation;
 };
