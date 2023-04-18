@@ -5,6 +5,7 @@ import filterRouter from "./filter";
 import leadsRouter from "./leads";
 import dealsRouter from "./deals";
 import stagesRouter from "./stages";
+import magicUserInvitationRouter from "./acceptMagicUserInvitation";
 
 export default [
   sessionAndRegistration,
@@ -14,4 +15,5 @@ export default [
   refreshToken,
   dealsRouter,
   stagesRouter,
+  magicUserInvitationRouter,
 ];

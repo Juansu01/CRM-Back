@@ -3,15 +3,13 @@ import { genSalt, hash, compare } from "bcrypt";
 import { validate } from "email-validator";
 import db from "../models";
 import jwt from "jsonwebtoken";
-import UserAttributes from "../models/user";
+import { generateAccessToken } from "../services/tokenGenerator";
 
-function generateAccessToken(user: UserAttributes) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "20min",
-  });
-}
-
-function authenticateToken(req: Request | any, res: Response, next: NextFunction) {
+function authenticateToken(
+  req: Request | any,
+  res: Response,
+  next: NextFunction
+) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
