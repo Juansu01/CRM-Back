@@ -3,6 +3,7 @@ import db from "../models";
 import { validate } from "email-validator";
 import { genSalt, hash } from "bcrypt";
 import { generateAccessToken } from "../services/tokenGenerator";
+import jwt from "jsonwebtoken";
 
 export const acceptMagicUserInvitation = async (
   req: Request,
@@ -13,6 +14,22 @@ export const acceptMagicUserInvitation = async (
   const { password, full_name, is_admin } = req.body;
 
   if (invitation) {
+    jwt.verify(
+      invitation.token,
+      process.env.ACCESS_TOKEN_SECRET,
+      (err, decoded) => {
+        if (err) {
+          return res.status(401).json({ message: "Invitation expired." });
+        }
+      }
+    );
+
+    if (invitation.accepted) {
+      return res
+        .status(401)
+        .json({ message: "Invitation is already accepted." });
+    }
+
     const invitee_email = invitation.invitee_email;
     const user = await db.User.findOne({ where: { email: invitee_email } });
 
@@ -54,6 +71,8 @@ export const acceptMagicUserInvitation = async (
                 .json({ message: "Funnel inside invite does not exist." });
             }
             await funnelToInviteUser.addUser(newUser);
+            invitation.accepted = true;
+            await invitation.save();
             return res.status(200).json({
               message: "Registration was successful!",
               access_token: token,
