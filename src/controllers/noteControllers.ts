@@ -2,12 +2,6 @@ import { Request, Response } from "express";
 import db from "../models";
 import messageGenerator from "../services/messageGenerator";
 
-// export const getOneNote = async (req: Request, res: Response) => {
-//     const { dealId } = parseInt(req.params.dealId);
-//     const OneNote = await db.Note.findOne({ where: { deal_id: dealId } })
-//     return res.status(200).json(OneNote);
-// };
-
 export const getAllNotes = async (req: Request, res: Response) => {
     const allNote = await db.Note.findAll();
 
