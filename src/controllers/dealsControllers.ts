@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import db from "../models";
 import {
-  saveImageLocally,
-  deleteImageFromLocalStorage,
-  uploadImageToCloudinary,
-  deleteImageFromCloudinary,
+  saveFileLocally,
+  deleteFileFromLocalStorage,
+  uploadFileToCloudinary,
+  deleteFileFromCloudinary,
 } from "../services/uploadToCloudinary";
 
 export const getAllDeals = async (req: Request, res: Response) => {
@@ -14,6 +14,7 @@ export const getAllDeals = async (req: Request, res: Response) => {
       { model: db.User },
       { model: db.Lead },
       { model: db.Stage },
+      { model: db.DataFile },
     ],
   });
 
@@ -28,6 +29,7 @@ export const getDeal = async (req: Request, res: Response) => {
       { model: db.User },
       { model: db.Lead },
       { model: db.Stage },
+      { model: db.DataFile },
     ],
   });
 
@@ -53,8 +55,8 @@ export const createDeal = async (req: Request, res: Response) => {
     status_id,
   } = req.body;
   const imageName = `${name + company_name}.png`;
-  saveImageLocally(imageName, req.file.buffer);
-  const result = await uploadImageToCloudinary(imageName);
+  saveFileLocally(imageName, req.file.buffer);
+  const result = await uploadFileToCloudinary(imageName);
 
   if (result.secure_url) {
     const newDeal = await db.Deal.create({
@@ -71,7 +73,7 @@ export const createDeal = async (req: Request, res: Response) => {
     });
 
     if (newDeal) {
-      deleteImageFromLocalStorage(imageName);
+      deleteFileFromLocalStorage(imageName);
       const user = await db.User.findByPk(user_id);
       if (user) {
         await newDeal.addUser(user);
@@ -97,7 +99,7 @@ export const deleteDeal = async (req: Request, res: Response) => {
 
   if (dealToDelete) {
     const imageToDelete = dealToDelete.name + dealToDelete.company_name;
-    deleteImageFromCloudinary(imageToDelete);
+    deleteFileFromCloudinary(imageToDelete);
     await dealToDelete.destroy();
     return res.status(200).json({ message: "Deal succesfully deleted" });
   } else {
@@ -131,12 +133,12 @@ export const updateDeal = async (req: Request, res: Response) => {
 
     if (req.file) {
       const newLogoName = dealToUpdate.name + dealToUpdate.company_name;
-      deleteImageFromCloudinary(previousLogo);
-      saveImageLocally(newLogoName, req.file.buffer);
-      const result = await uploadImageToCloudinary(newLogoName);
+      deleteFileFromCloudinary(previousLogo);
+      saveFileLocally(newLogoName, req.file.buffer);
+      const result = await uploadFileToCloudinary(newLogoName);
       if (result.secure_url) {
         dealToUpdate.logo = result.secure_url;
-        deleteImageFromLocalStorage(previousLogo);
+        deleteFileFromLocalStorage(previousLogo);
       } else {
         return res.status(500).json({ message: "Couldn't upload new logo." });
       }

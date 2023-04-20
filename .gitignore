@@ -39,5 +39,6 @@ coverage/
 !test/preprocessor.js
 mydb.sql
 deal_images
+file_directory
 
 # src/config
