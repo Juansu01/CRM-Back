@@ -7,6 +7,9 @@ info:
 paths:
   /api:
     get:
+      summary: API's first route
+      tags:
+        - API
       description: |
         API's first route
       operationId: firstRoute
@@ -20,6 +23,9 @@ paths:
                 example: Welcome to the Slsppln API
   /api/spec:
     get:
+      summary: Returns the specification for the API
+      tags:
+        - API
       description: |
         Returns the specification for the API
       operationId: apiSpec
@@ -34,6 +40,8 @@ paths:
   /api/filter/{model}/{attribute}:
     get:
       summary: Get filtered data from specific model.
+      tags:
+        - API
       parameters:
         - in: path
           name: model
@@ -76,24 +84,28 @@ paths:
           content:
             application/json:
               schema:
-                example: [
-                  {
+                example:
+                  [
+                    {
                       "id": 2,
                       "name": "Test",
                       "deal_id": 1,
                       "createdAt": "2023-03-14T20:06:56.000Z",
-                      "updatedAt": "2023-03-14T20:06:56.000Z"
-                  },
-                  {
+                      "updatedAt": "2023-03-14T20:06:56.000Z",
+                    },
+                    {
                       "id": 1,
                       "name": "Test",
                       "deal_id": 1,
                       "createdAt": "2023-03-14T20:06:04.000Z",
-                      "updatedAt": "2023-03-14T20:06:04.000Z"
-                  }
-              ]
+                      "updatedAt": "2023-03-14T20:06:04.000Z",
+                    },
+                  ]
   /api/users/login:
     post:
+      summary: Login Route.
+      tags:
+        - Users
       description: LogIn Route
       requestBody:
         description: Log user in.
@@ -121,6 +133,9 @@ paths:
                 $ref: "#/components/schemas/Error"
   /api/users/register:
     post:
+      summary: Register a new user.
+      tags:
+        - Users
       description: Register a new user
       responses:
         "200":
@@ -135,56 +150,65 @@ paths:
           description: Internal Server Error
   /api/funnels:
     get:
+      summary: Get all Funnels.
+      tags:
+        - Funnels
       description: Get all funnels
       responses:
         "200":
           description: All funnels were returned succesfully
           content:
             application/json:
-              example: [
-                {
+              example:
+                [
+                  {
                     "id": 1,
                     "name": "Test",
                     "deal_id": 1,
                     "createdAt": "2023-03-14T20:06:04.000Z",
                     "updatedAt": "2023-03-14T20:06:04.000Z",
-                    "Users": []
-                },
-                {
+                    "Users": [],
+                  },
+                  {
                     "id": 2,
                     "name": "Test",
                     "deal_id": 1,
                     "createdAt": "2023-03-14T20:06:56.000Z",
                     "updatedAt": "2023-03-14T20:06:56.000Z",
-                    "Users": []
-                },
-                {
+                    "Users": [],
+                  },
+                  {
                     "id": 3,
                     "name": "Test",
                     "deal_id": 1,
                     "createdAt": "2023-03-16T20:19:36.000Z",
                     "updatedAt": "2023-03-16T20:19:36.000Z",
-                    "Users": [
+                    "Users":
+                      [
                         {
-                            "id": 1,
-                            "full_name": "Juan Cadavid",
-                            "is_admin": false,
-                            "email": "test@test.com",
-                            "refresh_token": null,
-                            "createdAt": "2023-03-16T20:19:21.000Z",
-                            "updatedAt": "2023-03-16T20:19:21.000Z",
-                            "Funnel_User": {
-                                "createdAt": "2023-03-16T20:19:36.000Z",
-                                "updatedAt": "2023-03-16T20:19:36.000Z",
-                                "FunnelId": 3,
-                                "UserId": 1
-                            }
-                        }
-                    ]
-                }
-            ]
+                          "id": 1,
+                          "full_name": "Juan Cadavid",
+                          "is_admin": false,
+                          "email": "test@test.com",
+                          "refresh_token": null,
+                          "createdAt": "2023-03-16T20:19:21.000Z",
+                          "updatedAt": "2023-03-16T20:19:21.000Z",
+                          "Funnel_User":
+                            {
+                              "createdAt": "2023-03-16T20:19:36.000Z",
+                              "updatedAt": "2023-03-16T20:19:36.000Z",
+                              "FunnelId": 3,
+                              "UserId": 1,
+                            },
+                        },
+                      ],
+                  },
+                ]
     post:
-      description: Create a new funnel
+      summary: Create a new Funnel.
+      tags:
+        - Funnels
+      description: Create a new funnel.
       requestBody:
         description: Add new funnel
         required: true
@@ -197,22 +221,24 @@ paths:
           description: Funnel was created succesfully
           content:
             application/json:
-              example: {
-                "id": 3,
-                "name": "Test",
-                "deal_id": 1,
-                "updatedAt": "2023-03-16T20:19:36.140Z",
-                "createdAt": "2023-03-16T20:19:36.140Z"
-            }
+              example:
+                {
+                  "id": 3,
+                  "name": "Test",
+                  "deal_id": 1,
+                  "updatedAt": "2023-03-16T20:19:36.140Z",
+                  "createdAt": "2023-03-16T20:19:36.140Z",
+                }
         "404":
           description: Provided email doesn't have a user.
           content:
             application/json:
-              example: {
-                  "message": "User was not found, cannot add Funnel"
-              }
+              example: { "message": "User was not found, cannot add Funnel" }
   /api/funnel/{idFunnel}:
     patch:
+      summary: Update Funnel name.
+      tags:
+        - Funnels
       description: Update Funnel name
       requestBody:
         description: Body containing new name
@@ -234,28 +260,34 @@ paths:
           description: Funnel was succesfully updated
   /api/funnel/{idFunnel}/{email}:
     delete:
-        description: Deletes funnel
-        parameters:
-          - in: path
-            name: idFunnel
-            schema:
-              type: integer
-              example: 1
-            required: true
-            description: Id of the funnel to be deleted
-          - in: path
-            name: email
-            schema:
-              type: string
-              format: email
-              example: johndoe@gmail.com
-            required: true
-            description: Email of user who is making the request
-        responses:
-          "200":
-            description: Funnel was succesfully deleted
+      summary: Remove Funnels.
+      tags:
+        - Funnels
+      description: Delete funnels.
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be deleted
+        - in: path
+          name: email
+          schema:
+            type: string
+            format: email
+            example: johndoe@gmail.com
+          required: true
+          description: Email of user who is making the request
+      responses:
+        "200":
+          description: Funnel was succesfully deleted
   /api/funnel/stage/{idFunnel}:
     post:
+      summary: Create a new Stage and links it to Funnel using id.
+      tags:
+        - Funnels
       description: Creates a new Stage and links it to funnel using id
       requestBody:
         description: Contains Stage id
@@ -277,7 +309,10 @@ paths:
           description: Stage added to funnel
   /api/funnel/stage/{idFunnel}/{email}:
     delete:
-      description: Deletes
+      summary: Remove Stage and from Funnel.
+      tags:
+        - Funnels
+      description: Delete
       parameters:
         - in: path
           name: idFunnel
@@ -299,30 +334,36 @@ paths:
           description: Stage was successfully removed from Funnel
   /api/funnel/user/{idFunnel}/{email}:
     delete:
-        description: Removes User from Funnel
-        parameters:
-          - in: path
-            name: idFunnel
-            schema:
-              type: integer
-              example: 1
-            required: true
-            description: Id of the funnel to be updated
-          - in: path
-            name: email
-            schema:
-              type: string
-              example: johndoe@gmail.com
-            required: true
-            description: Email of user making the request
-        responses:
-          "200":
-            description: User was succesfully removed from Funnel
+      summary: Remove Users from Funnel
+      tags:
+        - Funnels
+      description: Remove Users from Funnel.
+      parameters:
+        - in: path
+          name: idFunnel
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the funnel to be updated
+        - in: path
+          name: email
+          schema:
+            type: string
+            example: johndoe@gmail.com
+          required: true
+          description: Email of user making the request
+      responses:
+        "200":
+          description: User was succesfully removed from Funnel
   /api/funnel/user/{idFunnel}:
     post:
-      description: Adds user to existing Funnel
+      summary: Add Users from Funnel
+      tags:
+        - Funnels
+      description: Add users to existing Funnel
       requestBody:
-        description: Contains user email
+        description: Contain user emails
         required: true
         content:
           application/json:
@@ -341,53 +382,62 @@ paths:
           description: User was succesfully added to Funnel
   /api/leads:
     get:
+      summary: Get all Leads
+      tags:
+        - Leads
       description: Get all existing Leads
       responses:
         "200":
           description: All leads were retuned successfully
           content:
             application/json:
-              example: [
-                {
-                  "id": 5,
-                  "company": "webflow",
-                  "email": "contact@webflow.com",
-                  "full_name": "Luis Paul",
-                  "createdAt": "2023-03-23T14:22:02.000Z",
-                  "updatedAt": "2023-03-23T14:25:48.000Z"
-                },
-                {
-                  "id": 7,
-                  "company": "Marchi",
-                  "email": "contact@marchi.com",
-                  "full_name": "Vean Till",
-                  "createdAt": "2023-03-23T14:22:02.000Z",
-                  "updatedAt": "2023-03-23T14:25:48.000Z"
-                }
-              ]
+              example:
+                [
+                  {
+                    "id": 5,
+                    "company": "webflow",
+                    "email": "contact@webflow.com",
+                    "full_name": "Luis Paul",
+                    "createdAt": "2023-03-23T14:22:02.000Z",
+                    "updatedAt": "2023-03-23T14:25:48.000Z",
+                  },
+                  {
+                    "id": 7,
+                    "company": "Marchi",
+                    "email": "contact@marchi.com",
+                    "full_name": "Vean Till",
+                    "createdAt": "2023-03-23T14:22:02.000Z",
+                    "updatedAt": "2023-03-23T14:25:48.000Z",
+                  },
+                ]
   /api/lead:
     post:
+      summary: Add new Leads
+      tags:
+        - Leads
       description: Add new lead
       requestBody:
         description: Contains all information of lead
         required: true
         content:
           application/json:
-            example: {
+            example:
+              {
                 "company": "Marketing Agency",
                 "email": "contact@marketing.com",
-                "full_name": "Luis Miguel"
+                "full_name": "Luis Miguel",
               }
       responses:
         "200":
-          description: Lead was succesfully created  
+          description: Lead was succesfully created
           content:
             application/json:
-              example: {
-                "message": "new lead createds"
-              }
+              example: { "message": "new lead created" }
   /api/lead/{leadId}:
     get:
+      summary: Get one Lead
+      tags:
+        - Leads
       description: Get just one lead
       parameters:
         - in: path
@@ -402,12 +452,16 @@ paths:
           description: Lead was succesfully returned
           content:
             application/json:
-              example: {
-                "company": "Marketing Agency",
-                "email": "contact@marketing.com",
-                "full_name": "Luis Miguel"
-              }
+              example:
+                {
+                  "company": "Marketing Agency",
+                  "email": "contact@marketing.com",
+                  "full_name": "Luis Miguel",
+                }
     patch:
+      summary: Update one Leads
+      tags:
+        - Leads
       description: Update one lead
       parameters:
         - in: path
@@ -422,10 +476,11 @@ paths:
           description: Lead was succesfully updated
           content:
             application/json:
-              example: {
-                "message": "lead updated"
-              }
+              example: { "message": "lead updated" }
     delete:
+      summary: Remove one Lead
+      tags:
+        - Leads
       description: Delete one lead
       parameters:
         - in: path
@@ -440,12 +495,12 @@ paths:
           description: Lead was succesfully deleted
           content:
             application/json:
-              example: {
-                "message": "lead deleted"
-
-              }      
+              example: { "message": "lead deleted" }
   /api/leads/order:
     get:
+      summary: Get Leads sorted by name, email, company
+      tags:
+        - Leads
       description: Order leads by full_name, email, company
       parameters:
         - in: query
@@ -462,21 +517,26 @@ paths:
         "200":
           description: Leads ordered successfully
           content:
-            application/json: 
-              example: [
-                {
+            application/json:
+              example:
+                [
+                  {
                     "company": "Marketing Agency",
                     "email": "contact@marketing.com",
-                    "full_name": "Luis Miguel"
+                    "full_name": "Luis Miguel",
                   },
                   {
                     "company": "Marketing Agency",
                     "email": "contact@marketing.com",
-                    "full_name": "Luis Miguel"
-                  }
+                    "full_name": "Luis Miguel",
+                  },
+                  const Note =,
                 ]
   /api/leads/filter:
     get:
+      summary: Filter Leads by name, email, company
+      tags:
+        - Leads
       description: Filter leads by full_name, email, company
       parameters:
         - in: query
@@ -493,21 +553,25 @@ paths:
         "200":
           description: Leads ordered successfully
           content:
-            application/json: 
-              example: [
-                {
+            application/json:
+              example:
+                [
+                  {
                     "company": "Marketing Agency",
                     "email": "contact@marketing.com",
-                    "full_name": "Luis Miguel"
+                    "full_name": "Luis Miguel",
                   },
                   {
                     "company": "Marketing Agency",
                     "email": "contact@marketing.com",
-                    "full_name": "Luis Miguel"
-                  }
+                    "full_name": "Luis Miguel",
+                  },
                 ]
   /api/deals:
     get:
+      summary: Get all Deals
+      tags:
+        - Deals
       description: Get all deals
       responses:
         "200":
@@ -515,6 +579,9 @@ paths:
   /api/deal/{id}:
     get:
       description: Get a deal based on id
+      summary: Get a Deal by id
+      tags:
+        - Deals
       parameters:
         - name: id
           in: path
@@ -528,6 +595,9 @@ paths:
           description: Deal successfully found.
     delete:
       description: Delete deal by id.
+      summary: Delete deal by id
+      tags:
+        - Deals
       parameters:
         - name: id
           in: path
@@ -541,7 +611,10 @@ paths:
           description: Successfully deleted deal
   /api/deal/{dealId}/addUser/{userId}:
     post:
+      tags:
+        - Deals
       description: Add existing User to existing Deal.
+      summary: Add user to deal
       parameters:
        - name: dealId
          in: path
@@ -560,8 +633,12 @@ paths:
       responses:
         "200":
           description: User successfully added to deal.
+  /api/deal/{dealId}/removeUser/{userId}:
     delete:
+      tags:
+        - Deals
       description: Delete User from Deal.
+      summary: Remove user from Deal
       parameters:
        - name: dealId
          in: path
@@ -582,7 +659,10 @@ paths:
           description: User successfully removed from deal.
   /api/deal/{dealId}/addStage/{stageId}:
     post:
+      tags:
+        - Deals
       description: Add existing User to existing Deal.
+      summary: Add stage to deal
       parameters:
        - name: dealId
          in: path
@@ -600,9 +680,13 @@ paths:
           example: 4
       responses:
         "200":
-          description: User successfully added to deal.
+          description: Stage successfully added to deal.
+  /api/deal/{dealId}/removeStage/{stageId}:
     delete:
-      description: Delete User from Deal.
+      tags:
+        - Deals
+      description: Delete Stage from Deal.
+      summary: Remove stage from deal
       parameters:
        - name: dealId
          in: path
@@ -613,22 +697,28 @@ paths:
           example: 4
        - name: stageId
          in: path
-         description: Id of Stageto remove from Deal.
+         description: Id of Stage to remove from Deal.
          required: true
          schema:
           type: integer
           example: 4
       responses:
         "200":
-          description: User successfully removed from deal.
+          description: Stage successfully removed from deal.
   /api/stages:
     get:
+      tags:
+        - Stages
       description: Get all Stages
+      summary: Get all Stages
       responses:
         "200":
           description: All Stages successfully retrieved
   /api/stage:
     post:
+      tags:
+        - Stages
+      summary: Create a new Stage
       description: Create a new Stage
       requestBody:
         description: Stage request body
@@ -642,6 +732,9 @@ paths:
           description: Stage created successfully.
   /api/stage/{id}:
     get:
+      tags:
+        - Stages
+      summary: Get specific Stage by id
       description: Get a specific deal by id
       parameters:
         - name: id
@@ -655,6 +748,9 @@ paths:
         "200":
           description: Stage successfully retrieved
     patch:
+      tags:
+        - Stages
+      summary: Update Stage by id
       description: Update Stage by id
       requestBody:
         description: Stage request body
@@ -675,6 +771,9 @@ paths:
         "200":
           description: Stage successfully retrieved
     delete:
+      summary: Delete Stage by id
+      tags:
+        - Stages
       description: Delete Stage by id.
       parameters:
         - name: id
@@ -687,8 +786,143 @@ paths:
       responses:
         "200":
           description: Stage successfully deleted.
+  /api/notes:
+    get:
+      summary: Get all Notes
+      tags:
+        - Notes
+      description: Get all notes
+      responses:
+        "200":
+          description: All notes successfully retrieved
+          content:
+            application/json:
+              example:
+                [
+                  {
+                    "id": 1,
+                    "content": "Deal note #1",
+                    "deal_id": 1,
+                    "createdAt": "2023-04-10T11:00:12.000Z",
+                    "updatedAt": "2023-04-12T17:30:03.000Z",
+                  },
+                  {
+                    "id": 2,
+                    "content": "Deal note #2",
+                    "deal_id": 2,
+                    "createdAt": "2023-04-12T17:01:57.000Z",
+                    "updatedAt": "2023-04-12T17:30:21.000Z",
+                  },
+                ]
+  /api/note/{dealId}:
+    get:
+      summary: Get one Note
+      tags:
+        - Notes
+      description: Get just one note
+      parameters:
+        - in: path
+          name: dealId
+          schema:
+            type: integer
+            example: 1
+          required: true
+          description: Id of the deal to get
+      responses:
+        "200":
+          description: Note was succesfully returned
+          content:
+            application/json:
+              example:
+                [
+                  {
+                    "id": 1,
+                    "content": "Deal note #1",
+                    "deal_id": 1,
+                    "createdAt": "2023-04-10T11:00:12.000Z",
+                    "updatedAt": "2023-04-12T17:30:03.000Z",
+                  },
+                ]
+    post:
+      summary: Create note
+      tags:
+        - Notes
+      description: Add new note
+      parameters:
+        - in: path
+          name: dealId
+          schema:
+            type: integer
+            example: 1
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNote"
+        required: true
+      responses:
+        "200":
+          description: Note was succesfully created
+          content:
+            application/json:
+              example: { "message": "Note created successfully" }
+        "401":
+          description: Note already exists.
+        "500":
+          description: Internal Server Error
+    patch:
+      summary: Update one Note
+      tags:
+        - Notes
+      description: Update note
+      parameters:
+        - in: path
+          name: dealId
+          schema:
+            type: integer
+            example: 1
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNote"
+      responses:
+        "200":
+          description: Note was succesfully updated
+          content:
+            application/json:
+              example: { "message": "Note update successfully" }
+    delete:
+      summary: Remove Note from Deal Id
+      tags:
+        - Notes
+      description: Delete note
+      parameters:
+        - in: path
+          name: dealId
+          schema:
+            type: integer
+            example:
+          required: true
+          description: Id of deal to note delete
+      responses:
+        "200":
+          description: Note was succesfully deleted
+          content:
+            application/json:
+              example: { "message": "Note deleted successfully" }
 components:
   schemas:
+    CreateNote:
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          example: Note of the deal.
     UpdateStage:
       properties:
         color:
