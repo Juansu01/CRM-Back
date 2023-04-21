@@ -33,6 +33,20 @@ export const uploadFileToCloudinary = async (name: string) => {
 };
 
 export const deleteFileFromCloudinary = (fileName: string) => {
+  if (fileName.includes("/")) {
+    const splitName = fileName.split("/");
+    fileName = splitName[splitName.length - 1];
+    cloudinary.uploader.destroy(
+      fileName,
+      { resource_type: "raw" },
+      (error, result: Object) => {
+        if (error) {
+          console.error(error);
+        }
+      }
+    );
+    return;
+  }
   cloudinary.uploader.destroy(fileName, (error, result: Object) => {
     if (error) {
       console.error(error);

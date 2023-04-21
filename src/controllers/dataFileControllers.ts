@@ -31,6 +31,12 @@ export const addDataFile = async (req: Request, res: Response) => {
   const deal = await db.Deal.findByPk(deal_id);
 
   if (deal) {
+    const dataFile = await deal.getDataFile();
+    if (dataFile) {
+      return res
+        .status(401)
+        .json({ message: "Deal already has a DataFile.", data_file: dataFile });
+    }
     const fileName = req.file.originalname;
     saveFileLocally(fileName, req.file.buffer);
     const result = await uploadFileToCloudinary(fileName).catch((err) => {
@@ -63,4 +69,23 @@ export const addDataFile = async (req: Request, res: Response) => {
   return res
     .status(404)
     .json({ message: "Deal was not found, cannot add file." });
+};
+
+export const patchDataFile = async (req: Request, res: Response) => {
+  const dataFileId = req.params.id;
+};
+
+export const deleteDataFile = async (req: Request, res: Response) => {
+  const dataFileId = req.params.id;
+  const dataFile = await db.DataFile.findByPk(dataFileId);
+
+  if (dataFile) {
+    deleteFileFromCloudinary(dataFile.document_file);
+    await dataFile.destroy();
+    return res.json({ message: "Datafile successfully deleted." });
+  }
+
+  return res
+    .status(404)
+    .json({ message: "Datafile was not found, cannot delete." });
 };
