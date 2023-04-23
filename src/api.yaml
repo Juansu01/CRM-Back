@@ -616,20 +616,20 @@ paths:
       description: Add existing User to existing Deal.
       summary: Add user to deal
       parameters:
-       - name: dealId
-         in: path
-         description: Id of Deal to link with User
-         required: true
-         schema:
-          type: integer
-          example: 4
-       - name: userId
-         in: path
-         description: Id of User to link with Deal
-         required: true
-         schema:
-          type: integer
-          example: 4
+        - name: dealId
+          in: path
+          description: Id of Deal to link with User
+          required: true
+          schema:
+            type: integer
+            example: 4
+        - name: userId
+          in: path
+          description: Id of User to link with Deal
+          required: true
+          schema:
+            type: integer
+            example: 4
       responses:
         "200":
           description: User successfully added to deal.
@@ -640,20 +640,20 @@ paths:
       description: Delete User from Deal.
       summary: Remove user from Deal
       parameters:
-       - name: dealId
-         in: path
-         description: Id of Deal to update
-         required: true
-         schema:
-          type: integer
-          example: 4
-       - name: userId
-         in: path
-         description: Id of User to remove from Deal.
-         required: true
-         schema:
-          type: integer
-          example: 4
+        - name: dealId
+          in: path
+          description: Id of Deal to update
+          required: true
+          schema:
+            type: integer
+            example: 4
+        - name: userId
+          in: path
+          description: Id of User to remove from Deal.
+          required: true
+          schema:
+            type: integer
+            example: 4
       responses:
         "200":
           description: User successfully removed from deal.
@@ -664,20 +664,20 @@ paths:
       description: Add existing User to existing Deal.
       summary: Add stage to deal
       parameters:
-       - name: dealId
-         in: path
-         description: Id of Deal to link with Stage
-         required: true
-         schema:
-          type: integer
-          example: 4
-       - name: stageId
-         in: path
-         description: Id of Stage to link with Deal
-         required: true
-         schema:
-          type: integer
-          example: 4
+        - name: dealId
+          in: path
+          description: Id of Deal to link with Stage
+          required: true
+          schema:
+            type: integer
+            example: 4
+        - name: stageId
+          in: path
+          description: Id of Stage to link with Deal
+          required: true
+          schema:
+            type: integer
+            example: 4
       responses:
         "200":
           description: Stage successfully added to deal.
@@ -688,20 +688,20 @@ paths:
       description: Delete Stage from Deal.
       summary: Remove stage from deal
       parameters:
-       - name: dealId
-         in: path
-         description: Id of Deal to update
-         required: true
-         schema:
-          type: integer
-          example: 4
-       - name: stageId
-         in: path
-         description: Id of Stage to remove from Deal.
-         required: true
-         schema:
-          type: integer
-          example: 4
+        - name: dealId
+          in: path
+          description: Id of Deal to update
+          required: true
+          schema:
+            type: integer
+            example: 4
+        - name: stageId
+          in: path
+          description: Id of Stage to remove from Deal.
+          required: true
+          schema:
+            type: integer
+            example: 4
       responses:
         "200":
           description: Stage successfully removed from deal.
@@ -914,8 +914,67 @@ paths:
           content:
             application/json:
               example: { "message": "Note deleted successfully" }
+  /api/datafiles:
+    get:
+      tags:
+        - DataFiles
+      summary: Get all Datafiles
+      responses:
+        "200":
+          description: All Datafiles retrieved successfully
+  /api/datafile/{id}:
+    get:
+      tags:
+        - DataFiles
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            example: 1
+          required: true
+      summary: Get a Datafile by id
+      responses:
+        "200":
+          description: Datafile was retrieved successfully
+        "404":
+          description: Datafile was not found.
+    delete:
+      tags:
+        - DataFiles
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            example: 1
+          required: true
+      summary: Delete Datafile by id
+      responses:
+        "200":
+          description: Datafile deleted successfully.
 components:
   schemas:
+    CreateDataFile:
+      required:
+        - file
+      properties:
+        file:
+          type: string
+          format: binary
+          example: Save your file in this field
+        deal_id:
+          type: string
+          example: 5
+    UpdateDataFile:
+      properties:
+        file:
+          type: string
+          format: binary
+          example: Save your file in this field
+        deal_id:
+          type: string
+          example: 5
     CreateNote:
       required:
         - content
