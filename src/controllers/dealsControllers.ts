@@ -63,7 +63,7 @@ export const createDeal = async (req: Request, res: Response) => {
       name,
       user_id: user_id !== "" ? user_id : null,
       company_name,
-      deal_value_estimation,
+      deal_value_estimation: +deal_value_estimation,
       description,
       funnel_id: funnel_id !== "" ? funnel_id : null,
       lead_id: lead_id !== "" ? lead_id : null,
@@ -127,7 +127,11 @@ export const updateDeal = async (req: Request, res: Response) => {
     const previousLogo = dealToUpdate.name + dealToUpdate.company_name;
     for (let attribute of dealAttributes) {
       if (req.body[attribute] !== dealToUpdate[attribute]) {
-        dealToUpdate[attribute] = req.body[attribute];
+        if (attribute === "deal_value_estimation") {
+          dealToUpdate[attribute] = +req.body[attribute];
+        } else {
+          dealToUpdate[attribute] = req.body[attribute];
+        }
       }
     }
 
