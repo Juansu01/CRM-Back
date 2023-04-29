@@ -23,7 +23,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
     funnel_id: number;
     static associate(models: any) {
       // define association here
-      MagicUserInvitation.belongsTo(models.Funnel, { foreignKey: "funnel_id" });
     }
   }
   MagicUserInvitation.init(
@@ -35,7 +34,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
       },
       invitee_email: DataTypes.STRING,
-      token: DataTypes.STRING,
+      token: DataTypes.TEXT,
       accepted: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
