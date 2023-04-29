@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import db from "../models";
 import { validate } from "email-validator";
 import { genSalt, hash } from "bcrypt";
-import { generateAccessToken, generateInvitationToken, timeExpires } from "../services/tokenGenerator";
+import { generateAccessToken, generateInvitationToken } from "../services/tokenGenerator";
 import jwt from "jsonwebtoken";
 
 export const acceptMagicUserInvitation = async (
@@ -97,45 +97,56 @@ export const createMagicUserInvitation = async (
   res: Response) => {
   const funnelId = req.params.funnelId;
   const { userId, invitee_email, timeExpires } = req.body;
-  await db.User.findByPk(userId)
-    .then(user => {
-      if (user.is_admin) {
-        const user = db.User.findOne({ where: { email: invitee_email } })
-        if (user) {
-          return res
-            .status(401)
-            .json({ message: "User is already registered." });
-        }
-        const invite = db.MagicUserInvitation.findOne({ where: { invitee_email: invitee_email } })
-          .then(async invite => {
-            if (invite.length == 0) {
-              const newInvite = await db.MagicUserInvitation.create({
-                invitee_email,
-                funnel_id: parseInt(funnelId !== "" ? funnelId : null)
-              })
 
-              if (newInvite) {
-                const inviteToken = newInvite.get({ plain: true });
-                const token = generateInvitationToken(inviteToken, timeExpires);
-                return res.status(200).json({
-                  funnelId,
-                  invitee_email,
-                  token: token,
-                  message: "Invitation created succesfully.",
-                });
-              }
-            }
-            else {
-              return res
-                .status(401)
-                .json({ message: "The Invitation was previously created" });
-            }
-          })
+  const funnel = await db.Funnel.findByPk(funnelId)
+  if (funnel === null) {
+    return res
+      .status(401)
+      .json({ message: "The funnel does not exist" });
+  }
+
+  if (/(7|15|30)d/.test(timeExpires) == false) {
+    return res
+      .status(401)
+      .json({ message: "Expiration time entered is invalid." });
+  }
+
+  const userAdmin = await db.User.findByPk(userId)
+  if (userAdmin.is_admin) {
+    const user = await db.User.findOne({ where: { email: invitee_email } })
+    if (user === null) {
+      const invite = await db.MagicUserInvitation.findOne({ where: { invitee_email: invitee_email } })
+      if (invite === null) {
+        const newInvite = await db.MagicUserInvitation.create({
+          invitee_email,
+          funnel_id: parseInt(funnelId !== "" ? funnelId : null),
+        })
+        if (newInvite) {
+          const inviteToken = newInvite.get({ plain: true });
+          const token = generateInvitationToken(inviteToken, timeExpires);
+          return res.status(200).json({
+            funnelId,
+            invitee_email,
+            token: token,
+            message: "Invitation created succesfully.",
+          });
+        }
       }
       else {
         return res
           .status(401)
-          .json({ message: "You don't have administrator permission" });
+          .json({ message: "The Invitation was previously created" });
       }
-    });
-}
+    }
+    else {
+      return res
+        .status(401)
+        .json({ message: "User is already registered." });
+    }
+  }
+  else {
+    return res
+      .status(401)
+      .json({ message: "You don't have administrator permission" });
+  }
+};

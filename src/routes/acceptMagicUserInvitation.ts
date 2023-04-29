@@ -12,7 +12,7 @@ magicUserInvitationRouter.post(
 );
 
 magicUserInvitationRouter.post(
-  "/magic-user-invitation/:funelId",
+  "/magic-user-invitation/:funnelId",
   createMagicUserInvitation
 );
 
