@@ -1,7 +1,7 @@
 "use strict";
 import { Model } from "sequelize";
 
-interface MagicUserInvitationAttributes {
+export interface MagicUserInvitationAttributes {
   id: string;
   invitee_email: string;
   token: string;
@@ -34,8 +34,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
       },
       invitee_email: DataTypes.STRING,
-      token: DataTypes.STRING,
-      accepted: DataTypes.BOOLEAN,
+      token: DataTypes.TEXT,
+      accepted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       funnel_id: DataTypes.INTEGER,
     },
     {

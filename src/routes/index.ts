@@ -6,6 +6,7 @@ import leadsRouter from "./leads";
 import dealsRouter from "./deals";
 import notesRouter from "./notes";
 import stagesRouter from "./stages";
+import magicUserInvitationRouter from "./acceptMagicUserInvitation";
 import dataFileRouter from "./datafiles";
 
 export default [
@@ -17,5 +18,6 @@ export default [
   refreshToken,
   dealsRouter,
   stagesRouter,
+  magicUserInvitationRouter,
   dataFileRouter,
 ];
