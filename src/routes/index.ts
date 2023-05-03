@@ -6,6 +6,7 @@ import leadsRouter from "./leads";
 import dealsRouter from "./deals";
 import notesRouter from "./notes";
 import stagesRouter from "./stages";
+import dataFileRouter from "./datafiles";
 
 export default [
   sessionAndRegistration,
@@ -16,4 +17,5 @@ export default [
   refreshToken,
   dealsRouter,
   stagesRouter,
+  dataFileRouter,
 ];

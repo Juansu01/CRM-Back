@@ -3,7 +3,7 @@ import { Model } from "sequelize";
 
 interface DataFileAttributes {
   id: number;
-  document_file: Blob;
+  document_file: string;
   deal_id: number;
 }
 
@@ -15,7 +15,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
      * The `models/index` file will call this method automatically.
      */
     id: number;
-    document_file: Blob;
+    document_file: string;
     deal_id: number;
     static associate(models: any) {
       // define association here
@@ -30,7 +30,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         primaryKey: true,
         allowNull: false,
       },
-      document_file: DataTypes.BLOB("long"),
+      document_file: DataTypes.STRING,
       deal_id: {
         type: DataTypes.INTEGER,
       },

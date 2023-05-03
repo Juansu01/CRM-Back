@@ -42,6 +42,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Deal.hasOne(models.Note, { foreignKey: "deal_id" });
       Deal.belongsToMany(models.Stage, { through: "Deal_Stage" });
       Deal.hasMany(models.Status);
+      Deal.hasOne(models.DataFile, { foreignKey: "deal_id" });
     }
   }
   Deal.init(
