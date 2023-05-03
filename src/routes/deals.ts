@@ -11,14 +11,23 @@ import {
   removeStageFromDeal,
 } from "../controllers/dealsControllers";
 import multer from "multer";
+import {
+  checkDealPost,
+  checkRequestBodyIsFormData,
+} from "../middlewares/checkRequestBody";
 
 const dealsRouter = Router();
 const upload = multer();
 
 dealsRouter.get("/deals", getAllDeals);
 dealsRouter.get("/deal/:id", getDeal);
-dealsRouter.post("/deal", upload.single("logo"), createDeal);
-dealsRouter.patch("/deal/:id", upload.single("logo"), updateDeal);
+dealsRouter.post("/deal", upload.single("logo"), checkDealPost, createDeal);
+dealsRouter.patch(
+  "/deal/:id",
+  upload.single("logo"),
+  checkRequestBodyIsFormData,
+  updateDeal
+);
 dealsRouter.delete("/deal/:id", deleteDeal);
 dealsRouter.post("/deal/:dealId/addUser/:userId", addUserToDeal);
 dealsRouter.delete("/deal/:dealId/removeUser/:userId", removeUserFromDeal);
