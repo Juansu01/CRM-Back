@@ -46,7 +46,7 @@ export const userRegistrationController = async (
           const token = generateAccessToken(rawUser);
           const refresh_token = generateRefreshToken(newUser.email);
           newUser.refresh_token = refresh_token;
-          newUser.save();
+          await newUser.save();
           return res.status(200).json({
             message: "Registration was successful!",
             access_token: token,
