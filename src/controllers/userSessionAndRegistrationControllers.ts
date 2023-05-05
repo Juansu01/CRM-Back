@@ -3,28 +3,10 @@ import { genSalt, hash, compare } from "bcrypt";
 import { validate } from "email-validator";
 import db from "../models";
 import jwt from "jsonwebtoken";
-import { generateAccessToken } from "../services/tokenGenerator";
-
-function authenticateToken(
-  req: Request | any,
-  res: Response,
-  next: NextFunction
-) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (!token) {
-    return res.status(401).json({ message: "No authorization token" });
-  }
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) {
-      console.error(err);
-      return res.status(403).json({ message: "Invalid token" });
-    }
-    req.user = user;
-    next();
-  });
-}
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../services/tokenGenerator";
 
 export const userRegistrationController = async (
   req: Request,
@@ -62,6 +44,9 @@ export const userRegistrationController = async (
         if (newUser) {
           const rawUser = newUser.get({ plain: true });
           const token = generateAccessToken(rawUser);
+          const refresh_token = generateRefreshToken(newUser.email);
+          newUser.refresh_token = refresh_token;
+          newUser.save();
           return res.status(200).json({
             message: "Registration was successful!",
             access_token: token,
@@ -82,21 +67,19 @@ export const userLogInController = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const user = await db.User.scope("withPassword").findOne({
     where: { email },
-    raw: true,
-    nest: true,
   });
 
   if (user) {
-    compare(password, user.password, (err, result) => {
+    compare(password, user.password, async (err, result) => {
       if (err) {
         console.error(err);
         return res.status(500).json({ message: "Internal server error" });
       }
       if (result) {
-        const accessToken = jwt.sign(
-          { user_email: user.email },
-          process.env.ACCESS_TOKEN_SECRET
-        );
+        const accessToken = generateAccessToken({ email: user.email });
+        const newRefreshToken = generateRefreshToken(user.email);
+        user.refresh_token = newRefreshToken;
+        await user.save();
         return res.json({
           message: "Login was successful!",
           access_token: accessToken,
