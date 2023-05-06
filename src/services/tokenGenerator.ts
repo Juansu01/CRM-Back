@@ -28,27 +28,29 @@ export const generateInvitationToken = (
 
 export const generateAccessTokenUsingRefreshToken = async (
   userEmail: string
-): Promise<any> => {
+): Promise<string | null> => {
   const user = await db.User.findOne({ where: { email: userEmail } });
-  let accessToken = "";
-  if (user) {
-    const refreshToken = user.refresh_token;
-    jwt.verify(
-      refreshToken,
-      process.env.ACCESS_TOKEN_SECRET,
-      async (err, decoded) => {
-        if (err) {
-          if (err.message === "jwt expired") return null;
-        }
-        console.log("Generating new accessss token");
-        const newAccessToken = jwt.sign(
-          { user_email: user.email },
-          process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: "20min" }
-        );
-        accessToken = newAccessToken;
-      }
-    );
+
+  if (!user) {
+    return null;
   }
-  return accessToken;
+
+  const refreshToken = user.refresh_token;
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.ACCESS_TOKEN_SECRET);
+
+    console.log("Generating new access token");
+    const newAccessToken = jwt.sign(
+      { user_email: user.email },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "20min" }
+    );
+
+    return newAccessToken;
+  } catch (err) {
+    if (err.message === "jwt expired") {
+      return null;
+    }
+    console.error("Failed to verify refresh token");
+  }
 };
