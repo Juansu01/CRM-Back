@@ -9,7 +9,6 @@ import cors from "cors";
 import routes from "./routes/index";
 import * as OpenApiValidator from "express-openapi-validator";
 import cookieParser from "cookie-parser";
-import checkAccessToken from "./middlewares/checkAccessToken";
 
 const port = process.env.PORT || 4000;
 const app: Express = express();
@@ -35,7 +34,7 @@ app.use(
   })
 );
 
-app.get("/api", checkAccessToken, async (req: Request, res: Response) => {
+app.get("/api", async (req: Request, res: Response) => {
   res.send("Welcome to the Slsppln API");
 });
 
