@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import {
   getAllLeads,
   getOneLead,
@@ -8,20 +9,20 @@ import {
   orderLeads,
   filterLeads,
 } from "../controllers/leadsControllers";
-
 import { emailExistsLead } from "../middlewares/emailExists";
+import checkAccessToken from "../middlewares/checkAccessToken";
 
 const router = Router();
 
 // CRUD
-router.get("/leads", getAllLeads);
-router.get("/lead/:leadId", getOneLead);
-router.post("/lead", emailExistsLead, postLead);
-router.patch("/lead/:leadId", patchLead);
-router.delete("/lead/:leadId", deleteLead);
+router.get("/leads", checkAccessToken, getAllLeads);
+router.get("/lead/:leadId", checkAccessToken, getOneLead);
+router.post("/lead", checkAccessToken, emailExistsLead, postLead);
+router.patch("/lead/:leadId", checkAccessToken, patchLead);
+router.delete("/lead/:leadId", checkAccessToken, deleteLead);
 
 // Filtering
-router.get("/leads/order", orderLeads);
-router.get("/leads/filter", filterLeads);
+router.get("/leads/order", checkAccessToken, orderLeads);
+router.get("/leads/filter", checkAccessToken, filterLeads);
 
 export default router;

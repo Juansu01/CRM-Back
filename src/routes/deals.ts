@@ -15,23 +15,47 @@ import {
   checkDealPost,
   checkRequestBodyIsFormData,
 } from "../middlewares/checkRequestBody";
+import checkAccessToken from "../middlewares/checkAccessToken";
 
 const dealsRouter = Router();
 const upload = multer();
 
-dealsRouter.get("/deals", getAllDeals);
-dealsRouter.get("/deal/:id", getDeal);
-dealsRouter.post("/deal", upload.single("logo"), checkDealPost, createDeal);
+dealsRouter.get("/deals", checkAccessToken, getAllDeals);
+dealsRouter.get("/deal/:id", checkAccessToken, getDeal);
+dealsRouter.post(
+  "/deal",
+  checkAccessToken,
+  upload.single("logo"),
+  checkDealPost,
+  createDeal
+);
 dealsRouter.patch(
   "/deal/:id",
+  checkAccessToken,
   upload.single("logo"),
   checkRequestBodyIsFormData,
   updateDeal
 );
-dealsRouter.delete("/deal/:id", deleteDeal);
-dealsRouter.post("/deal/:dealId/addUser/:userId", addUserToDeal);
-dealsRouter.delete("/deal/:dealId/removeUser/:userId", removeUserFromDeal);
-dealsRouter.post("/deal/:dealId/addStage/:stageId", addStageToDeal);
-dealsRouter.delete("/deal/:dealId/removeStage/:stageId", removeStageFromDeal);
+dealsRouter.delete("/deal/:id", checkAccessToken, deleteDeal);
+dealsRouter.post(
+  "/deal/:dealId/addUser/:userId",
+  checkAccessToken,
+  addUserToDeal
+);
+dealsRouter.delete(
+  "/deal/:dealId/removeUser/:userId",
+  checkAccessToken,
+  removeUserFromDeal
+);
+dealsRouter.post(
+  "/deal/:dealId/addStage/:stageId",
+  checkAccessToken,
+  addStageToDeal
+);
+dealsRouter.delete(
+  "/deal/:dealId/removeStage/:stageId",
+  checkAccessToken,
+  removeStageFromDeal
+);
 
 export default dealsRouter;

@@ -6,7 +6,7 @@ export const isAdmin = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userEmail = req.body.email || req.params.email;
+  const userEmail = req.body.user_email || req.params.user_email;
 
   try {
     const user = await db.User.findOne({ where: { email: userEmail } });
